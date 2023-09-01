@@ -2,11 +2,20 @@ import { Button, Col, Row } from "antd";
 import React from "react";
 import style from "./login.module.less";
 import logo from "./imgs/logo.png";
-import { Form } from "antd";
-import { Input } from "antd";
-import { Select } from "antd";
+import { Form, Input, Select } from "antd";
+
+import {
+  Routes,
+  Route,
+  Link,
+  useNavigate,
+  useLocation,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
 
 export default function Index() {
+  
   const onFinish = (values) => {
     console.log(values);
   };
