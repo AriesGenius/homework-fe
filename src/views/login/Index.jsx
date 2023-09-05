@@ -1,7 +1,7 @@
 import { Button, Col, Row } from "antd";
 import React from "react";
 import style from "./login.module.less";
-import logo from "./imgs/logo.png";
+import logo from "./../../assets/imgs/logo.png";
 import { Form, Input, Select } from "antd";
 
 import {
@@ -15,9 +15,14 @@ import {
 } from "react-router-dom";
 
 export default function Index() {
+
+  const nav = useNavigate();
   
   const onFinish = (values) => {
     console.log(values);
+
+
+    nav('/work')
   };
 
   return (
@@ -52,6 +57,7 @@ export default function Index() {
               label="Email"
               name="email"
               rules={[{ required: true, message: "Please input your email!" }]}
+              initialValue={"email"}
             >
               <Input type="text" placeholder="email" />
             </Form.Item>
@@ -64,6 +70,7 @@ export default function Index() {
                   message: "Please input your Password!",
                 },
               ]}
+              initialValue={"password"}
             >
               <Input type="text" placeholder="Password" />
             </Form.Item>
