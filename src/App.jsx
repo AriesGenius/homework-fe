@@ -17,13 +17,20 @@ import style from "./App.module.less";
 
 import logo from "./assets/imgs/logo.png";
 import { Dropdown } from "antd";
-import { DownOutlined, SmileOutlined } from "@ant-design/icons";
+import {
+  DownOutlined,
+  EditOutlined,
+  HomeOutlined,
+  SmileOutlined,
+} from "@ant-design/icons";
 import { Space, Form, Menu } from "antd";
 import { useState } from "react";
 import { Modal } from "antd";
 import { Input } from "antd";
 
 const { Header, Footer, Sider, Content } = Layout;
+
+import Course from "./views/course";
 
 export default function App() {
   return (
@@ -32,6 +39,7 @@ export default function App() {
         <Route path="/" element={<Login />} />
         <Route path="/work" element={<LayoutWrap />}>
           <Route index element={<LayoutIndexPage />} />
+          <Route path="courses" element={<Course />} />
           {/* <Route path="about" element={<About />} /> */}
         </Route>
       </Routes>
@@ -42,6 +50,7 @@ export default function App() {
 function LayoutWrap() {
   const [pwdVisible, setPwdVisible] = useState(false);
 
+  const navigate = useNavigate();
   return (
     <>
       <Layout>
@@ -69,7 +78,7 @@ function LayoutWrap() {
                   },
                   {
                     key: "2",
-                    label: <a>Logout</a>,
+                    label: <a href="/">Logout</a>,
                   },
                 ],
               }}
@@ -87,9 +96,21 @@ function LayoutWrap() {
               defaultSelectedKeys={["1"]}
               defaultOpenKeys={["sub1"]}
               mode="inline"
+              onClick={({ key }) => {
+                navigate(key);
+              }}
               items={[
-                { key: "1", label: "Option 1" },
-                { key: "2", label: "Option 2" },
+                {
+                  key: "/work",
+                  label: "Index",
+                  icon: <HomeOutlined />,
+                },
+                {
+                  key: "/work/courses",
+                  label: "Submit",
+                  icon: <EditOutlined />,
+                },
+                // { key: "2", label: "Option 2" },
               ]}
             />
           </Sider>

@@ -13,16 +13,17 @@ import {
   Navigate,
   Outlet,
 } from "react-router-dom";
+import { useState } from "react";
 
 export default function Index() {
+  const [isLogin, setIsLogin] = useState(true);
 
   const nav = useNavigate();
-  
+
   const onFinish = (values) => {
     console.log(values);
 
-
-    nav('/work')
+    nav("/work");
   };
 
   return (
@@ -41,57 +42,134 @@ export default function Index() {
             labelCol={{ span: 8 }}
             onFinish={onFinish}
           >
-            <Form.Item
-              label="Type"
-              name="type"
-              rules={[{ required: true, message: "Please input your email!" }]}
-              initialValue={"1"}
-            >
-              <Select>
-                <Select.Option value="1">Student</Select.Option>
-                <Select.Option value="2">Teacher</Select.Option>
-              </Select>
-            </Form.Item>
+            {isLogin ? (
+              <>
+                <Form.Item
+                  label="Type"
+                  name="type"
+                  rules={[
+                    { required: true, message: "Please input your email!" },
+                  ]}
+                  initialValue={"1"}
+                >
+                  <Select>
+                    <Select.Option value="1">Student</Select.Option>
+                    <Select.Option value="2">Teacher</Select.Option>
+                  </Select>
+                </Form.Item>
 
-            <Form.Item
-              label="Email"
-              name="email"
-              rules={[{ required: true, message: "Please input your email!" }]}
-              initialValue={"email"}
-            >
-              <Input type="text" placeholder="email" />
-            </Form.Item>
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your Password!",
-                },
-              ]}
-              initialValue={"password"}
-            >
-              <Input type="text" placeholder="Password" />
-            </Form.Item>
+                <Form.Item
+                  label="Email"
+                  name="email"
+                  rules={[
+                    { required: true, message: "Please input your email!" },
+                  ]}
+                  initialValue={"email"}
+                >
+                  <Input type="text" placeholder="email" />
+                </Form.Item>
+                <Form.Item
+                  label="Password"
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your Password!",
+                    },
+                  ]}
+                  initialValue={"password"}
+                >
+                  <Input type="text" placeholder="Password" />
+                </Form.Item>
 
-            <br />
-            <br />
+                <br />
+                <br />
 
-            <Form.Item>
-              <Button
-                block
-                htmlType="submit"
-                type="primary"
-                className={style.btn}
-              >
-                Login
-              </Button>
-            </Form.Item>
+                <Form.Item>
+                  <Button
+                    block
+                    htmlType="submit"
+                    type="primary"
+                    className={style.btn}
+                  >
+                    Login
+                  </Button>
+                </Form.Item>
 
-            <p style={{ textAlign: "right" }}>
-              <a href="/register">Register</a>
-            </p>
+                <p style={{ textAlign: "right" }}>
+                  <Button
+                    type="link"
+                    onClick={() => {
+                      setIsLogin(false);
+                    }}
+                  >
+                    No account? Register now
+                  </Button>
+                </p>
+              </>
+            ) : (
+              <>
+                <Form.Item
+                  label="Type"
+                  name="type"
+                  rules={[
+                    { required: true, message: "Please input your email!" },
+                  ]}
+                  initialValue={"1"}
+                >
+                  <Select>
+                    <Select.Option value="1">Student</Select.Option>
+                    <Select.Option value="2">Teacher</Select.Option>
+                  </Select>
+                </Form.Item>
+
+                <Form.Item
+                  label="Email"
+                  name="email"
+                  rules={[
+                    { required: true, message: "Please input your email!" },
+                  ]}
+                  initialValue={"email"}
+                >
+                  <Input type="text" placeholder="email" />
+                </Form.Item>
+                <Form.Item
+                  label="Password"
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your Password!",
+                    },
+                  ]}
+                  initialValue={"password"}
+                >
+                  <Input type="text" placeholder="Password" />
+                </Form.Item>
+
+                <Form.Item>
+                  <Button
+                    block
+                    htmlType="submit"
+                    type="primary"
+                    className={style.btn}
+                  >
+                    Register
+                  </Button>
+                </Form.Item>
+
+                <p style={{ textAlign: "right" }}>
+                  <Button
+                    type="link"
+                    onClick={() => {
+                      setIsLogin(true);
+                    }}
+                  >
+                    Sign in with an account
+                  </Button>
+                </p>
+              </>
+            )}
           </Form>
         </Col>
       </Row>
