@@ -14,6 +14,26 @@ import {
   Outlet,
 } from "react-router-dom";
 import { useState } from "react";
+import { message } from "antd";
+
+const users = [
+  {
+    name: "aries",
+    email: "zhajy154@mymail.unisa.edu.au",
+    password: "student1",
+  },
+  { name: "li", email: "liyzy092@mymail.unisa.edu.au", password: "student2" },
+  {
+    name: "april",
+    email: "laumy037@mymail.unisa.edu.au",
+    password: "student3",
+  },
+  {
+    name: "mccuthloch",
+    email: "mcclt001@mymail.unisa.edu.au",
+    password: "student4",
+  },
+];
 
 export default function Index() {
   const [isLogin, setIsLogin] = useState(true);
@@ -23,7 +43,15 @@ export default function Index() {
   const onFinish = (values) => {
     console.log(values);
 
-    nav("/work");
+    const hasLogin = users.find(
+      (it) => it.email === values.email && it.password === values.password
+    );
+
+    if (hasLogin) {
+      nav("/work");
+    } else {
+      message.error("user does not exist");
+    }
   };
 
   return (
@@ -64,7 +92,7 @@ export default function Index() {
                   rules={[
                     { required: true, message: "Please input your email!" },
                   ]}
-                  initialValue={"email"}
+                  initialValue={"mcclt001@mymail.unisa.edu.au"}
                 >
                   <Input type="text" placeholder="email" />
                 </Form.Item>
@@ -77,7 +105,7 @@ export default function Index() {
                       message: "Please input your Password!",
                     },
                   ]}
-                  initialValue={"password"}
+                  initialValue={"student4"}
                 >
                   <Input type="text" placeholder="Password" />
                 </Form.Item>

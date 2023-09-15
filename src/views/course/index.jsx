@@ -5,24 +5,53 @@ import { Upload } from "antd";
 import { Input } from "antd";
 import { Table } from "antd";
 import React from "react";
+import { useState } from "react";
 
 export default function Index() {
   const dataSource = [
     {
-      key: "1",
-      status: "1",
-      name: "12313",
-      age: 32,
-      address: "address",
+      name: "Aries",
+      email: "zhajy154@mymail.unisa.edu.au",
+      password: "student1",
+      course: ["Systems Design", ", Web Technology"],
+      assignment_id: "week1",
+      submission_status: "1",
+      date: "",
+      grade: "",
     },
     {
-      key: "2",
-      status: "2",
-      name: "489498",
-      age: 42,
-      address: "address",
+      name: "Li",
+      email: "liyzy092@mymail.unisa.edu.au",
+      password: "student2",
+      course: ["Python Programing"],
+      assignment_id: "week1",
+      submission_status: "2",
+      date: "",
+      grade: "",
+    },
+    {
+      name: "April",
+      email: "laumy037@mymail.unisa.edu.au",
+      password: "student3",
+      course: ["Data Structures", ", Database for the Enterprise"],
+      assignment_id: "week1",
+      submission_status: "2",
+      date: "",
+      grade: "",
+    },
+    {
+      name: "McCulloch",
+      email: "mcclt001@mymail.unisa.edu.au",
+      password: "student4",
+      course: ["Python Programing", ", Systems Design"],
+      assignment_id: "week1",
+      submission_status: "1",
+      date: "",
+      grade: "",
     },
   ];
+
+  const [list, setList] = useState(dataSource);
 
   const uploadProps = {
     showUploadList: false,
@@ -46,18 +75,18 @@ export default function Index() {
   const columns = [
     {
       title: "No.",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "assignment_id",
+      key: "assignment_id",
     },
     {
       title: "Course",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "course",
+      key: "course",
     },
     {
       title: "Current Status",
-      dataIndex: "status",
-      key: "status",
+      dataIndex: "submission_status",
+      key: "submission_status",
       render: (text) => <>{stateObject[text]}</>,
     },
     {
@@ -103,7 +132,7 @@ export default function Index() {
         <Form.Item label="Course" name="course">
           <Input placeholder="Course Name" />
         </Form.Item>
-        <Form.Item label="submission status">
+        <Form.Item label="submission status" name="submission_status">
           <Select style={{ width: "180px" }} placeholder="Submission Status">
             {stateMap.map((item) => (
               <Select.Option value={item.value} key={item.value}>
@@ -113,15 +142,35 @@ export default function Index() {
           </Select>
         </Form.Item>
         <Form.Item>
-          <Button type="primary">Query</Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              const val = form.getFieldsValue();
+              const oldData = dataSource.filter(
+                (it) =>
+                  it.course.includes(val.course) ||
+                  it.submission_status == val.submission_status
+              );
+              setList(oldData);
+            }}
+          >
+            Query
+          </Button>
           &nbsp; &nbsp;
-          <Button>Reset</Button>
+          <Button
+            onClick={() => {
+              form.resetFields();
+              setList(dataSource);
+            }}
+          >
+            Reset
+          </Button>
         </Form.Item>
       </Form>
       <br />
       <br />
 
-      <Table dataSource={dataSource} columns={columns} />
+      <Table rowKey="email" dataSource={list} columns={columns} />
     </>
   );
 }
