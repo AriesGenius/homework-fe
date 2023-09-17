@@ -1,0 +1,6 @@
+C:\Users\mayla\OneDrive\文件\Study\Year3-2\INFT 3042\data\2023SP528\Database1\bin\Debug\Database1.dacpac
+C:\Users\mayla\OneDrive\文件\Study\Year3-2\INFT 3042\data\2023SP528\Database1\bin\Debug\Database1.dll
+C:\Users\mayla\OneDrive\文件\Study\Year3-2\INFT 3042\data\2023SP528\Database1\bin\Debug\Database1.pdb
+C:\Users\mayla\OneDrive\文件\Study\Year3-2\INFT 3042\data\2023SP528\Database1\obj\Debug\Database1.sqlproj.AssemblyReference.cache
+C:\Users\mayla\OneDrive\文件\Study\Year3-2\INFT 3042\data\2023SP528\Database1\obj\Debug\Database1.dll
+C:\Users\mayla\OneDrive\文件\Study\Year3-2\INFT 3042\data\2023SP528\Database1\obj\Debug\Database1.pdb
