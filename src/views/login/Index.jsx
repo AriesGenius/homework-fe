@@ -15,6 +15,7 @@ import {
 } from "react-router-dom";
 import { useState } from "react";
 import { message } from "antd";
+import { apiLogin, apiReg } from "../../utils/api";
 
 const users = [
   {
@@ -41,15 +42,29 @@ export default function Index() {
   const nav = useNavigate();
 
   const onFinish = (values) => {
-    console.log(values);
+    console.log("values -> :", values);
 
-    const hasLogin = users.find(
-      (it) => it.email === values.email && it.password === values.password
-    );
-
-    if (hasLogin) {
-      nav("/work");
+    if (isLogin) {
+      apiLogin(values).then((res) => {
+        console.log("res -> :", res);
+        if (res.data.code === 200) {
+          message.success("login success");
+          // nav("/work");
+        } else {
+          message.error("login failed");
+        }
+      });
     } else {
+      apiReg(values).then((res) => {
+        console.log("res -> :", res);
+        if (res.data.code === 200) {
+          message.success("login success");
+          // nav("/work");
+        } else {
+          message.error("login failed");
+        }
+      });
+
       message.error("user does not exist");
     }
   };
@@ -87,14 +102,13 @@ export default function Index() {
                 </Form.Item>
 
                 <Form.Item
-                  label="Email"
-                  name="email"
+                  label="username"
+                  name="username"
                   rules={[
-                    { required: true, message: "Please input your email!" },
+                    { required: true, message: "Please input your username!" },
                   ]}
-                  initialValue={"mcclt001@mymail.unisa.edu.au"}
                 >
-                  <Input type="text" placeholder="email" />
+                  <Input type="text" placeholder="username" />
                 </Form.Item>
                 <Form.Item
                   label="Password"
@@ -105,7 +119,6 @@ export default function Index() {
                       message: "Please input your Password!",
                     },
                   ]}
-                  initialValue={"student4"}
                 >
                   <Input type="text" placeholder="Password" />
                 </Form.Item>
@@ -141,7 +154,7 @@ export default function Index() {
                   label="Type"
                   name="type"
                   rules={[
-                    { required: true, message: "Please input your email!" },
+                    { required: true, message: "Please Select Your Type!" },
                   ]}
                   initialValue={"1"}
                 >
@@ -152,15 +165,28 @@ export default function Index() {
                 </Form.Item>
 
                 <Form.Item
-                  label="Email"
-                  name="email"
+                  label="username"
+                  name="username"
                   rules={[
-                    { required: true, message: "Please input your email!" },
+                    { required: true, message: "Please input your username!" },
                   ]}
-                  initialValue={"email"}
                 >
-                  <Input type="text" placeholder="email" />
+                  <Input type="text" placeholder="username" />
                 </Form.Item>
+
+                
+
+                <Form.Item
+                  label="useremail"
+                  name="useremail"
+                  rules={[
+                    { required: true, message: "Please input your useremail!" },
+                  ]}
+                >
+                  <Input type="text" placeholder="useremail" />
+                </Form.Item>
+
+
                 <Form.Item
                   label="Password"
                   name="password"
