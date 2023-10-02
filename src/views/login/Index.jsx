@@ -88,12 +88,11 @@ export default function Index() {
             {isLogin ? (
               <>
                 <Form.Item
-                  label="Type"
-                  name="type"
+                  label="usertype"
+                  name="usertype"
                   rules={[
                     { required: true, message: "Please input your email!" },
                   ]}
-                  initialValue={"1"}
                 >
                   <Select>
                     <Select.Option value="1">Student</Select.Option>
@@ -174,8 +173,6 @@ export default function Index() {
                   <Input type="text" placeholder="username" />
                 </Form.Item>
 
-                
-
                 <Form.Item
                   label="useremail"
                   name="useremail"
@@ -185,7 +182,6 @@ export default function Index() {
                 >
                   <Input type="text" placeholder="useremail" />
                 </Form.Item>
-
 
                 <Form.Item
                   label="Password"
