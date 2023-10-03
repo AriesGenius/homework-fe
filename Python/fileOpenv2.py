@@ -58,6 +58,8 @@ for line in fileOpen:
     elif className in line:
         classes.append(line)
 
+newClasses = [name.replace("<panel_attributes>", "") for name in classes]
+
 print(arrowCount)
 
 # listing the names of the relationships
@@ -80,6 +82,79 @@ for index in arrowCount:
     elif index == 5:
         relationships.append("Composition")
 
+# characters to be removed from the lists.
+spaces = " "
+letter1 = "x"
+letter2 = "\n"
+letter3 = "y"
+letter4 = "w"
+letter5 = "h"
+arrow1 = "<"
+arrow2 = ">"
+slash1 = "/"
+underscore = "_"
+
+# for loops using replace statements to remove the
+# previously stated characters.
+for idx, ele in enumerate(xCoordinate):
+    xCoordinate[idx] = ele.replace(letter1, '')
+for idx, ele in enumerate(xCoordinate):
+    xCoordinate[idx] = ele.replace(spaces, '')
+for idx, ele in enumerate(xCoordinate):
+    xCoordinate[idx] = ele.replace(letter2, '')
+for idx, ele in enumerate(xCoordinate):
+    xCoordinate[idx] = ele.replace(arrow1, '')
+for idx, ele in enumerate(xCoordinate):
+    xCoordinate[idx] = ele.replace(arrow2, '')
+for idx, ele in enumerate(xCoordinate):
+    xCoordinate[idx] = ele.replace(slash1, '')
+
+for idx, ele in enumerate(yCoordinate):
+    yCoordinate[idx] = ele.replace(letter3, '')
+for idx, ele in enumerate(yCoordinate):
+    yCoordinate[idx] = ele.replace(spaces, '')
+for idx, ele in enumerate(yCoordinate):
+    yCoordinate[idx] = ele.replace(letter2, '')
+for idx, ele in enumerate(yCoordinate):
+    yCoordinate[idx] = ele.replace(arrow1, '')
+for idx, ele in enumerate(yCoordinate):
+    yCoordinate[idx] = ele.replace(arrow2, '')
+for idx, ele in enumerate(yCoordinate):
+    yCoordinate[idx] = ele.replace(slash1, '')
+
+for idx, ele in enumerate(wCoordinate):
+    wCoordinate[idx] = ele.replace(letter4, '')
+for idx, ele in enumerate(wCoordinate):
+    wCoordinate[idx] = ele.replace(spaces, '')
+for idx, ele in enumerate(wCoordinate):
+    wCoordinate[idx] = ele.replace(letter2, '')
+for idx, ele in enumerate(wCoordinate):
+    wCoordinate[idx] = ele.replace(arrow1, '')
+for idx, ele in enumerate(wCoordinate):
+    wCoordinate[idx] = ele.replace(arrow2, '')
+for idx, ele in enumerate(wCoordinate):
+    wCoordinate[idx] = ele.replace(slash1, '')
+
+for idx, ele in enumerate(hCoordinate):
+    hCoordinate[idx] = ele.replace(letter5, '')
+for idx, ele in enumerate(hCoordinate):
+    hCoordinate[idx] = ele.replace(spaces, '')
+for idx, ele in enumerate(hCoordinate):
+    hCoordinate[idx] = ele.replace(letter2, '')
+for idx, ele in enumerate(hCoordinate):
+    hCoordinate[idx] = ele.replace(arrow1, '')
+for idx, ele in enumerate(hCoordinate):
+    hCoordinate[idx] = ele.replace(arrow2, '')
+for idx, ele in enumerate(hCoordinate):
+    hCoordinate[idx] = ele.replace(slash1, '')
+
+for idx, ele in enumerate(newClasses):
+    newClasses[idx] = ele.replace(letter2, '')
+for idx, ele in enumerate(newClasses):
+    newClasses[idx] = ele.replace(spaces, '')
+for idx, ele in enumerate(newClasses):
+    newClasses[idx] = ele.replace(underscore, '')
+
 # printing everything
 print("The relationships are", relationships)
 
@@ -88,4 +163,4 @@ print("The y coordinates are:", yCoordinate)
 print("The w coordinates are:", wCoordinate)
 print("The h coordinates are:", hCoordinate)
 
-print("The classes are:", classes)
+print("The classes are:", newClasses)
