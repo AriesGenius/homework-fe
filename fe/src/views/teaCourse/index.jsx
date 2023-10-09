@@ -1,11 +1,15 @@
-import { Button, Form } from "antd";
-import { Select } from "antd";
-import { message } from "antd";
-import { Upload } from "antd";
-import { Input } from "antd";
-import { Table } from "antd";
-import React from "react";
-import { useState } from "react";
+import {
+  Button,
+  Divider,
+  Form,
+  Select,
+  message,
+  Upload,
+  Input,
+  Table,
+  Modal,
+} from "antd";
+import React, { useState } from "react";
 
 export default function Index() {
   const dataSource = [
@@ -128,6 +132,10 @@ export default function Index() {
 
   return (
     <>
+      <Button type="primary">Add Course</Button>
+
+      <Divider />
+      <br />
       <Form layout="inline" form={form}>
         <Form.Item label="Course" name="course">
           <Input placeholder="Course Name" />
@@ -171,6 +179,92 @@ export default function Index() {
       <br />
 
       <Table rowKey="email" dataSource={list} columns={columns} />
+
+      <AddCourseModal />
     </>
   );
 }
+
+// eslint-disable-next-line react/prop-types
+const AddCourseModal = ({ visible, onCreate, onCancel }) => {
+  const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+
+  const handleOk = () => {
+    setLoading(true);
+    form
+      .validateFields()
+      .then((values) => {
+        onCreate(values);
+        setLoading(false);
+        form.resetFields();
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  };
+
+  return (
+    <Modal
+      visible={visible}
+      title="Add Course"
+      okText="Add"
+      confirmLoading={loading}
+      onCancel={onCancel}
+      onOk={handleOk}
+    >
+      <Form form={form} layout="vertical">
+        <Form.Item
+          name="course_name"
+          label="Course Name"
+          rules={[{ required: true, message: "Please enter a course name" }]}
+        >
+          <Input />
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
+};
+
+// eslint-disable-next-line react/prop-types
+const AddWorkModal = ({ visible, onCreate, onCancel }) => {
+  const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+
+  const handleOk = () => {
+    setLoading(true);
+    form
+      .validateFields()
+      .then((values) => {
+        onCreate(values);
+        setLoading(false);
+        form.resetFields();
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  };
+
+  return (
+    <Modal
+      visible={visible}
+      title="Add Course"
+      okText="Add"
+      confirmLoading={loading}
+      onCancel={onCancel}
+      onOk={handleOk}
+    >
+      <Form form={form} layout="vertical">
+        <Form.Item
+          name="course_homework"
+          label="Course Homework"
+          rules={[
+            { required: true, message: "Please enter a course homework" },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
+};

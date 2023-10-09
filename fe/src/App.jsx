@@ -30,7 +30,8 @@ import { Input } from "antd";
 
 const { Header, Footer, Sider, Content } = Layout;
 
-import Course from "./views/course";
+import StuCourse from "./views/stuCourse";
+import TeaCourse from "./views/teaCourse";
 
 export default function App() {
   return (
@@ -39,7 +40,9 @@ export default function App() {
         <Route path="/" element={<Login />} />
         <Route path="/work" element={<LayoutWrap />}>
           <Route index element={<LayoutIndexPage />} />
-          <Route path="courses" element={<Course />} />
+          <Route path="stu-courses" element={<StuCourse />} />
+          <Route path="tea-courses" element={<TeaCourse />} />
+          <Route path="work-list" element={<TeaCourse />} />
           {/* <Route path="about" element={<About />} /> */}
         </Route>
       </Routes>
@@ -49,6 +52,7 @@ export default function App() {
 
 function LayoutWrap() {
   const [pwdVisible, setPwdVisible] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   const navigate = useNavigate();
   return (
@@ -78,13 +82,23 @@ function LayoutWrap() {
                   },
                   {
                     key: "2",
-                    label: <a href="/">Logout</a>,
+                    label: (
+                      <a
+                        href="/"
+                        onClick={() => {
+                          localStorage.clear();
+                          navigate("/");
+                        }}
+                      >
+                        Logout
+                      </a>
+                    ),
                   },
                 ],
               }}
             >
               <Space>
-                Bom
+                {user?.username || ""}
                 <DownOutlined />
               </Space>
             </Dropdown>
@@ -105,12 +119,21 @@ function LayoutWrap() {
                   label: "Index",
                   icon: <HomeOutlined />,
                 },
-                {
-                  key: "/work/courses",
-                  label: "Submit",
+                user.type == 1 && {
+                  key: "/work/stu-courses",
+                  label: "Courses",
                   icon: <EditOutlined />,
                 },
-                // { key: "2", label: "Option 2" },
+                user.type == 2 && {
+                  key: "/work/tea-courses",
+                  label: "Courses",
+                  icon: <EditOutlined />,
+                },
+                user.type == 2 && {
+                  key: "/work/work-list",
+                  label: "work",
+                  icon: <EditOutlined />,
+                },
               ]}
             />
           </Sider>
