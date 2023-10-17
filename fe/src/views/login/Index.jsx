@@ -29,7 +29,11 @@ export default function Index() {
         if (res.code === 200) {
           message.success("login success");
           localStorage.setItem("user", JSON.stringify(res.data));
-          nav("/work");
+          if (res.data.type == 1) {
+            nav("/work/stu-courses");
+          } else {
+            nav("/work/tea-courses");
+          }
         } else {
           message.error("login failed");
         }

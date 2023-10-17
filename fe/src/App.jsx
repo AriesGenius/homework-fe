@@ -32,6 +32,7 @@ const { Header, Footer, Sider, Content } = Layout;
 
 import StuCourse from "./views/stuCourse";
 import TeaCourse from "./views/teaCourse";
+import TeaWork from "./views/teaWork";
 
 export default function App() {
   return (
@@ -42,7 +43,7 @@ export default function App() {
           <Route index element={<LayoutIndexPage />} />
           <Route path="stu-courses" element={<StuCourse />} />
           <Route path="tea-courses" element={<TeaCourse />} />
-          <Route path="work-list" element={<TeaCourse />} />
+          <Route path="work-list" element={<TeaWork />} />
           {/* <Route path="about" element={<About />} /> */}
         </Route>
       </Routes>
@@ -114,24 +115,19 @@ function LayoutWrap() {
                 navigate(key);
               }}
               items={[
-                {
-                  key: "/work",
-                  label: "Index",
-                  icon: <HomeOutlined />,
-                },
+                // {
+                //   key: "/work",
+                //   label: "Index",
+                //   icon: <HomeOutlined />,
+                // },
                 user.type == 1 && {
                   key: "/work/stu-courses",
-                  label: "Courses",
+                  label: "Student Courses",
                   icon: <EditOutlined />,
                 },
                 user.type == 2 && {
                   key: "/work/tea-courses",
-                  label: "Courses",
-                  icon: <EditOutlined />,
-                },
-                user.type == 2 && {
-                  key: "/work/work-list",
-                  label: "work",
+                  label: "Teacher Courses",
                   icon: <EditOutlined />,
                 },
               ]}

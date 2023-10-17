@@ -74,29 +74,29 @@ export default function Index() {
   const columns = [
     {
       title: "No.",
-      dataIndex: "assignment_id",
-      key: "assignment_id",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
+      title: "homework_name",
+      dataIndex: "homework_name",
+      key: "homework_name",
     },
     {
       title: "Course",
-      dataIndex: "course",
-      key: "course",
+      dataIndex: "homework_course",
+      key: "homework_course",
     },
-    {
-      title: "Current Status",
-      dataIndex: "submission_status",
-      key: "submission_status",
-      render: (text) => <>{stateObject[text]}</>,
-    },
+    // {
+    //   title: "Current Status",
+    //   dataIndex: "submission_status",
+    //   key: "submission_status",
+    //   render: (text) => <>{stateObject[text]}</>,
+    // },
     {
       title: "Date",
-      dataIndex: "address",
-      key: "address",
-    },
-    {
-      title: "Grade",
-      dataIndex: "address",
-      key: "address",
+      dataIndex: "homework_time",
+      key: "homework_time",
     },
     {
       title: "Operate",
@@ -121,7 +121,11 @@ export default function Index() {
               <Button>Submiting</Button>
             </Upload>
             &nbsp; &nbsp;
-            <Button type="link">Faceback</Button>
+            {row.homework_score != "未批改" && (
+              <Button type="link" href={row.homework_content} target="_blank">
+                Faceback
+              </Button>
+            )}
           </>
         );
       },
@@ -172,7 +176,6 @@ export default function Index() {
           <Button
             onClick={() => {
               form.resetFields();
-              setList(dataSource);
             }}
           >
             Reset
@@ -182,7 +185,7 @@ export default function Index() {
       <br />
       <br />
 
-      <Table rowKey="email" dataSource={dataSource} columns={columns} />
+      <Table rowKey="email" dataSource={list} columns={columns} />
     </>
   );
 }

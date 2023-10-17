@@ -9,132 +9,94 @@ import {
   Table,
   Modal,
 } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { apiGetTeaCourse, apiNewWork } from "../../utils/api";
 
 export default function Index() {
-  const dataSource = [
-    {
-      name: "Aries",
-      email: "zhajy154@mymail.unisa.edu.au",
-      password: "student1",
-      course: ["Systems Design", ", Web Technology"],
-      assignment_id: "week1",
-      submission_status: "1",
-      date: "",
-      grade: "",
-    },
-    {
-      name: "Li",
-      email: "liyzy092@mymail.unisa.edu.au",
-      password: "student2",
-      course: ["Python Programing"],
-      assignment_id: "week1",
-      submission_status: "2",
-      date: "",
-      grade: "",
-    },
-    {
-      name: "April",
-      email: "laumy037@mymail.unisa.edu.au",
-      password: "student3",
-      course: ["Data Structures", ", Database for the Enterprise"],
-      assignment_id: "week1",
-      submission_status: "2",
-      date: "",
-      grade: "",
-    },
-    {
-      name: "McCulloch",
-      email: "mcclt001@mymail.unisa.edu.au",
-      password: "student4",
-      course: ["Python Programing", ", Systems Design"],
-      assignment_id: "week1",
-      submission_status: "1",
-      date: "",
-      grade: "",
-    },
-  ];
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-  const [list, setList] = useState(dataSource);
+  const [list, setList] = useState([]);
 
-  const uploadProps = {
-    showUploadList: false,
-    name: "file",
-    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-    headers: {
-      authorization: "authorization-text",
+  const [workState, setWorkState] = useState({
+    open: false,
+    row: {},
+
+    onCreate: (data) => {
+      apiNewWork({
+        course_name: data.course_name,
+        course_homework: data.course_homework,
+      }).then((res) => {
+        message.success("Add Success");
+
+        const old = { ...workState };
+        setWorkState({ ...old, open: false, row: {} });
+      });
     },
-    onChange(info) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
+    onCancel: () => {
+      const old = { ...workState };
+      setWorkState({ ...old, open: false, row: {} });
     },
-  };
+  });
 
   const columns = [
     {
       title: "No.",
-      dataIndex: "assignment_id",
-      key: "assignment_id",
+      dataIndex: "id",
+      key: "id",
     },
     {
-      title: "Course",
-      dataIndex: "course",
-      key: "course",
+      title: "course_name",
+      dataIndex: "course_name",
+      key: "course_name",
     },
     {
-      title: "Current Status",
-      dataIndex: "submission_status",
-      key: "submission_status",
-      render: (text) => <>{stateObject[text]}</>,
-    },
-    {
-      title: "Date",
-      dataIndex: "address",
-      key: "address",
-    },
-    {
-      title: "Grade",
-      dataIndex: "address",
-      key: "address",
+      title: "course_teacher",
+      dataIndex: "course_teacher",
+      key: "course_teacher",
     },
     {
       title: "Operate",
-      render: () => {
+      render: (row) => {
         return (
           <>
-            <Upload {...uploadProps}>
-              <Button>Submiting</Button>
-            </Upload>
+            <Button
+              onClick={() => {
+                const old = { ...workState };
+                setWorkState({ ...old, open: true, row });
+              }}
+            >
+              Add Work
+            </Button>
             &nbsp; &nbsp;
-            <Button type="link">Faceback</Button>
+            <Button type="link" href={`/work/work-list?course_name=${row.course_name}`}>
+              Works
+            </Button>
           </>
         );
       },
     },
   ];
 
-  const stateMap = [
-    { label: "submitted", value: "1" },
-    { label: "uncommitted", value: "2" },
-  ];
-  const stateObject = stateMap.reduce((obj, item) => {
-    obj[item.value] = item.label;
-    return obj;
-  }, {});
-
   const [form] = Form.useForm();
+
+  const getList = () => {
+    apiGetTeaCourse({
+      course_teacher: user.username,
+    }).then((res) => {
+      setList(res.data?.courses || []);
+    });
+  };
+
+  useEffect(() => {
+    getList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
-      <Button type="primary">Add Course</Button>
-
-      <Divider />
+      {/* <Button type="primary">Add Course</Button> */}
+      {/* <Divider /> */}
+      {/* 
       <br />
       <Form layout="inline" form={form}>
         <Form.Item label="Course" name="course">
@@ -176,17 +138,18 @@ export default function Index() {
         </Form.Item>
       </Form>
       <br />
-      <br />
+      <br /> 
+      */}
 
-      <Table rowKey="email" dataSource={list} columns={columns} />
+      <Table rowKey="id" dataSource={list} columns={columns} />
 
-      <AddCourseModal />
+      <AddWorkModal {...workState} />
     </>
   );
 }
 
 // eslint-disable-next-line react/prop-types
-const AddCourseModal = ({ visible, onCreate, onCancel }) => {
+const AddWorkModal = ({ open, onCreate, onCancel, row }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
@@ -195,7 +158,7 @@ const AddCourseModal = ({ visible, onCreate, onCancel }) => {
     form
       .validateFields()
       .then((values) => {
-        onCreate(values);
+        onCreate({ ...values, ...row });
         setLoading(false);
         form.resetFields();
       })
@@ -206,48 +169,7 @@ const AddCourseModal = ({ visible, onCreate, onCancel }) => {
 
   return (
     <Modal
-      visible={visible}
-      title="Add Course"
-      okText="Add"
-      confirmLoading={loading}
-      onCancel={onCancel}
-      onOk={handleOk}
-    >
-      <Form form={form} layout="vertical">
-        <Form.Item
-          name="course_name"
-          label="Course Name"
-          rules={[{ required: true, message: "Please enter a course name" }]}
-        >
-          <Input />
-        </Form.Item>
-      </Form>
-    </Modal>
-  );
-};
-
-// eslint-disable-next-line react/prop-types
-const AddWorkModal = ({ visible, onCreate, onCancel }) => {
-  const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
-
-  const handleOk = () => {
-    setLoading(true);
-    form
-      .validateFields()
-      .then((values) => {
-        onCreate(values);
-        setLoading(false);
-        form.resetFields();
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  };
-
-  return (
-    <Modal
-      visible={visible}
+      open={open}
       title="Add Course"
       okText="Add"
       confirmLoading={loading}

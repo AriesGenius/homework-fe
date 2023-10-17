@@ -27,3 +27,17 @@ export const apiReg = (data) => post("/user/register", data);
 export const apiGetStuCourse = (data) => post("/user/query_homework", data);
 export const apiSubmitStuCourse = (data) =>
   post("/user/submit_homework", data, "file");
+
+// 老师拥有的课程
+export const apiGetTeaCourse = (data) =>
+  post("/user/query_course_by_teacher", data);
+
+// 创建课程作业
+export const apiNewWork = (data) => post("/user/create_course_homework", data);
+
+// 返回这个课程所发布的所有作业
+export const apiGetWork = (data) =>
+  post("/user/query_homework_by_course", data);
+
+// 删除作业
+export const apiDelWork = (data) => post("/user/delete_homework", data);
