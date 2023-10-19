@@ -13,8 +13,8 @@ file_list = []
 relationshipArrow = "lt"
 
 # the string which represents relationships
-relationship = "<id>Relation<id>"
-relationCount = 0
+relationship = "<id>Relation</id>"
+relationCount = -1
 relationLevel = []
 
 # arrows for relationship labels
@@ -97,6 +97,7 @@ for line in fileOpen:
     # appending the labels to a list
     if labelArrow1 in line or labelArrow2 in line:
         labels.append(line)
+        print(relationCount)
         relationLevel.append(relationCount)
 
     # appending the coordinates if they are found in the line of the file.
@@ -154,20 +155,20 @@ print(arrowCount)
 relationships = []
 
 # The different numbers represent what type of relationship
-for index in arrowCount:
-    if index == 2:
+for ind in arrowCount:
+    if ind == 2:
         relationships.append("Inheritance")
-    elif index == 0:
+    elif ind == 0:
         relationships.append("Association")
-    elif index == 2.1:
+    elif ind == 2.1:
         relationships.append("Realisation")
-    elif index == 1.1:
+    elif ind == 1.1:
         relationships.append("Dependency")
-    elif index == 3:
+    elif ind == 3:
         relationships.append("Directed Association")
-    elif index == 4:
+    elif ind == 4:
         relationships.append("Aggregation")
-    elif index == 5:
+    elif ind == 5:
         relationships.append("Composition")
 
 # characters to be removed from the lists.
@@ -194,6 +195,8 @@ dateTime = "DateTime"
 string = "str"
 bool = "bool"
 twoDots = ":"
+leftArrow = "&lt;"
+rightArrow = "&gt;"
 
 # for loops using replace statements to remove the
 # previously stated characters.
@@ -325,6 +328,15 @@ for k in attributeType:
 for idx, ele in enumerate(attributeTypes):
     attributeTypes[idx] = ele.replace(letter2, '')
 
+for idx, ele in enumerate(labels):
+    labels[idx] = ele.replace(letter2, '')
+for idx, ele in enumerate(labels):
+    labels[idx] = ele.replace(panelAttributes, '')
+for idx, ele in enumerate(labels):
+    labels[idx] = ele.replace(leftArrow, '<')
+for idx, ele in enumerate(labels):
+    labels[idx] = ele.replace(rightArrow, '>')
+
 # printing everything
 print("The relationships are", relationships)
 
@@ -376,6 +388,7 @@ for x in newClasses:
 
 f.write("\n")
 
+indCount = 0
 multiplicityCount = 0
 for r in relationships:
     f.write("RelationshipComponent(")
@@ -385,7 +398,12 @@ for r in relationships:
     f.write(", ")
     f.write("TargetClass")
     f.write(", ")
-    f.write("Label")
+    #print(relationships.index(r))
+    #if relationships.index(r) == relationLevel[indCount]:
+        #f.write(labels[r])
+    #else:
+        #f.write("no label")
+    f.write("label")
     f.write(", [")
     f.write(m1[multiplicityCount])
     f.write(", ")
@@ -393,6 +411,7 @@ for r in relationships:
     f.write("])")
     f.write("\n")
     multiplicityCount += 1
+    indCount += 1
 
 f.write("\n")
 
