@@ -17,39 +17,23 @@ import { useState } from "react";
 import { message } from "antd";
 import { apiLogin, apiReg } from "../../utils/api";
 
-const users = [
-  {
-    name: "aries",
-    email: "zhajy154@mymail.unisa.edu.au",
-    password: "student1",
-  },
-  { name: "li", email: "liyzy092@mymail.unisa.edu.au", password: "student2" },
-  {
-    name: "april",
-    email: "laumy037@mymail.unisa.edu.au",
-    password: "student3",
-  },
-  {
-    name: "mccuthloch",
-    email: "mcclt001@mymail.unisa.edu.au",
-    password: "student4",
-  },
-];
-
 export default function Index() {
   const [isLogin, setIsLogin] = useState(true);
 
   const nav = useNavigate();
 
   const onFinish = (values) => {
-    console.log("values -> :", values);
-
     if (isLogin) {
       apiLogin(values).then((res) => {
         console.log("res -> :", res);
-        if (res.data.code === 200) {
+        if (res.code === 200) {
           message.success("login success");
-          // nav("/work");
+          localStorage.setItem("user", JSON.stringify(res.data));
+          if (res.data.type == 1) {
+            nav("/work/stu-courses");
+          } else {
+            nav("/work/tea-courses");
+          }
         } else {
           message.error("login failed");
         }
@@ -57,15 +41,13 @@ export default function Index() {
     } else {
       apiReg(values).then((res) => {
         console.log("res -> :", res);
-        if (res.data.code === 200) {
-          message.success("login success");
-          // nav("/work");
+        if (res.code === 200) {
+          message.success("Register success");
+          setIsLogin(true);
         } else {
-          message.error("login failed");
+          message.error("Register failed");
         }
       });
-
-      message.error("user does not exist");
     }
   };
 
@@ -150,12 +132,11 @@ export default function Index() {
             ) : (
               <>
                 <Form.Item
-                  label="Type"
+                  label="usertype"
                   name="type"
                   rules={[
                     { required: true, message: "Please Select Your Type!" },
                   ]}
-                  initialValue={"1"}
                 >
                   <Select>
                     <Select.Option value="1">Student</Select.Option>
@@ -192,7 +173,6 @@ export default function Index() {
                       message: "Please input your Password!",
                     },
                   ]}
-                  initialValue={"password"}
                 >
                   <Input type="text" placeholder="Password" />
                 </Form.Item>

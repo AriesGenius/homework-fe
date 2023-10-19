@@ -26,3 +26,11 @@ Currently, two official plugins are available:
 帐号 aliyun9796378098
 
 密码 Zjs54321
+
+
+
+
+
+Class
+
+ClassAdmin

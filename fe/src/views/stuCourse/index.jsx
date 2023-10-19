@@ -1,11 +1,10 @@
-import { Button, Form } from "antd";
-import { Select } from "antd";
-import { message } from "antd";
-import { Upload } from "antd";
-import { Input } from "antd";
-import { Table } from "antd";
-import React from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+
+import { Button, Form, Select, message, Upload, Input, Table } from "antd";
+
+import { apiGetStuCourse, apiSubmitStuCourse } from "../../utils/api";
+
+const user = JSON.parse(localStorage.getItem("user") || "{}");
 
 export default function Index() {
   const dataSource = [
@@ -51,64 +50,82 @@ export default function Index() {
     },
   ];
 
-  const [list, setList] = useState(dataSource);
+  const [list, setList] = useState([]);
+
+  const [fileList, setFileList] = useState([]);
 
   const uploadProps = {
     showUploadList: false,
-    name: "file",
-    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-    headers: {
-      authorization: "authorization-text",
-    },
-    onChange(info) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
+    fileList,
+  };
+
+  const submitFile = (param) => {
+    console.log("param -> :", param);
+    const name = new FormData();
+    name.append("file", param.file);
+    name.append("homework_name", param.homework_name);
+    name.append("homework_course", param.homework_course);
+    name.append("homework_user", param.homework_user);
+    apiSubmitStuCourse(name).then((res) => {
+      console.log("res -> :", res);
+    });
   };
 
   const columns = [
     {
       title: "No.",
-      dataIndex: "assignment_id",
-      key: "assignment_id",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
+      title: "homework_name",
+      dataIndex: "homework_name",
+      key: "homework_name",
     },
     {
       title: "Course",
-      dataIndex: "course",
-      key: "course",
+      dataIndex: "homework_course",
+      key: "homework_course",
     },
-    {
-      title: "Current Status",
-      dataIndex: "submission_status",
-      key: "submission_status",
-      render: (text) => <>{stateObject[text]}</>,
-    },
+    // {
+    //   title: "Current Status",
+    //   dataIndex: "submission_status",
+    //   key: "submission_status",
+    //   render: (text) => <>{stateObject[text]}</>,
+    // },
     {
       title: "Date",
-      dataIndex: "address",
-      key: "address",
-    },
-    {
-      title: "Grade",
-      dataIndex: "address",
-      key: "address",
+      dataIndex: "homework_time",
+      key: "homework_time",
     },
     {
       title: "Operate",
-      render: () => {
+      render: (row) => {
         return (
           <>
-            <Upload {...uploadProps}>
+            <Upload
+              {...uploadProps}
+              beforeUpload={(file) => {
+                console.log("file -> :", file);
+                const { homework_name, homework_course, homework_user } = row;
+
+                submitFile({
+                  file,
+                  homework_name,
+                  homework_course,
+                  homework_user,
+                });
+                return false;
+              }}
+            >
               <Button>Submiting</Button>
             </Upload>
             &nbsp; &nbsp;
-            <Button type="link">Faceback</Button>
+            {row.homework_score != "未批改" && (
+              <Button type="link" href={row.homework_content} target="_blank">
+                Faceback
+              </Button>
+            )}
           </>
         );
       },
@@ -119,6 +136,7 @@ export default function Index() {
     { label: "submitted", value: "1" },
     { label: "uncommitted", value: "2" },
   ];
+
   const stateObject = stateMap.reduce((obj, item) => {
     obj[item.value] = item.label;
     return obj;
@@ -126,13 +144,22 @@ export default function Index() {
 
   const [form] = Form.useForm();
 
+  const getList = () => {
+    apiGetStuCourse({
+      homework_user: user.username,
+      homework_course: form.getFieldValue("course"),
+    }).then((res) => {
+      setList(res.data?.homeworks || []);
+    });
+  };
+
   return (
     <>
       <Form layout="inline" form={form}>
         <Form.Item label="Course" name="course">
           <Input placeholder="Course Name" />
         </Form.Item>
-        <Form.Item label="submission status" name="submission_status">
+        {/* <Form.Item label="submission status" name="submission_status">
           <Select style={{ width: "180px" }} placeholder="Submission Status">
             {stateMap.map((item) => (
               <Select.Option value={item.value} key={item.value}>
@@ -140,27 +167,15 @@ export default function Index() {
               </Select.Option>
             ))}
           </Select>
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item>
-          <Button
-            type="primary"
-            onClick={() => {
-              const val = form.getFieldsValue();
-              const oldData = dataSource.filter(
-                (it) =>
-                  it.course.includes(val.course) ||
-                  it.submission_status == val.submission_status
-              );
-              setList(oldData);
-            }}
-          >
+          <Button type="primary" onClick={() => getList()}>
             Query
           </Button>
           &nbsp; &nbsp;
           <Button
             onClick={() => {
               form.resetFields();
-              setList(dataSource);
             }}
           >
             Reset
