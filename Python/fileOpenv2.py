@@ -130,7 +130,7 @@ while indexCount < len(file_list):
     if attributes in file_list[indexCount] and methods not in file_list[indexCount + 1]:
         attributesIndex = 1
         attributeCount = 0
-        while attributes not in file_list[indexCount + attributesIndex]:
+        while attributes not in file_list[(indexCount + attributesIndex)] and "</panel_attributes>" not in file_list[(indexCount + attributesIndex)]:
             attributesList.append(file_list[(indexCount + attributesIndex)])
             newAttributesList.append(file_list[(indexCount + attributesIndex)])
             attributeType.append(file_list[(indexCount + attributesIndex)])
@@ -318,12 +318,14 @@ for t in attributesList:
         attributeVis.append("#")
 
 attributeTypes = []
+
 for k in attributeType:
     ch = ":"
-    listOfChars = k.split(ch, 1)
-    if len(listOfChars) > 0:
-        k = listOfChars[1]
-        attributeTypes.append(k)
+    if ch in k:
+        listOfChars = k.split(ch, 1)
+        if len(listOfChars) > 0:
+            k = listOfChars[1]
+            attributeTypes.append(k)
 
 for idx, ele in enumerate(attributeTypes):
     attributeTypes[idx] = ele.replace(letter2, '')
@@ -377,7 +379,9 @@ for x in newClasses:
     #writeCount = 0
     #c = 0
     for y in attributeCountList:
-        while c <= attributeCountList[y]:
+        print(y)
+        #while c <= attributeCountList[y]:
+        while c <= 2:
             f.write(newAttributesList[writeCount])
             f.write(", ")
             writeCount += 1
@@ -400,6 +404,7 @@ for r in relationships:
     f.write(", ")
     #print(relationships.index(r))
     #if relationships.index(r) == relationLevel[indCount]:
+        #print(r)
         #f.write(labels[r])
     #else:
         #f.write("no label")
@@ -417,14 +422,23 @@ f.write("\n")
 
 c1 = 0
 c2 = 0
+lengthValue = 0
+
 for a in newAttributesList:
     f.write("AttributeComponent(")
     f.write(a)
     f.write(", ")
-    f.write(attributeTypes[c2])
+    if len(attributeTypes) > lengthValue:
+        f.write(attributeTypes[c2])
+    else:
+        f.write("noAttributeType")
     f.write(", ")
-    f.write(attributeVis[c1])
+    if len(attributeVis) > lengthValue:
+        f.write(attributeVis[c1])
+    else:
+        f.write("noAttributeVis")
     f.write(")")
     f.write("\n")
     c1 += 1
     c2 += 1
+    lengthValue += 1
