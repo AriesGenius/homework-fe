@@ -368,32 +368,40 @@ print("the labels are:", labels)
 print("relationship labels level:", relationLevel)
 
 f = open("classFormat.txt", "w")
-#for y in newClasses:
-#    f.writelines(y)
+
 writeCount = 0
 c = 0
+classIndex = 0
+attributesTotal = 0
 for x in newClasses:
     f.write("ClassComponent(")
     f.write(x)
     f.write(",[")
-    #writeCount = 0
-    #c = 0
-    for y in attributeCountList:
-        print(y)
-        #while c <= attributeCountList[y]:
-        while c <= 2:
-            f.write(newAttributesList[writeCount])
-            f.write(", ")
-            writeCount += 1
-            c += 1
-        writeCount += y
+    while newClasses.index(x) == classIndex:
+        if classIndex == 0:
+            while c < attributeCountList[writeCount]:
+                f.write(newAttributesList[c])
+                if c != (attributeCountList[writeCount] - 1):
+                    f.write(", ")
+                c += 1
+            classIndex += 1
+        else:
+            while c >= attributesTotal and c < (attributesTotal + attributeCountList[writeCount]):
+                f.write(newAttributesList[c])
+                if c != (attributesTotal + attributeCountList[writeCount] - 1):
+                    f.write(", ")
+                c += 1
+            classIndex += 1
+        attributesTotal += attributeCountList[writeCount]
     f.write("])")
     f.write("\n")
+    writeCount += 1
 
 f.write("\n")
 
 indCount = 0
 multiplicityCount = 0
+labelCount = 0
 for r in relationships:
     f.write("RelationshipComponent(")
     f.write(r)
@@ -402,13 +410,12 @@ for r in relationships:
     f.write(", ")
     f.write("TargetClass")
     f.write(", ")
-    #print(relationships.index(r))
-    #if relationships.index(r) == relationLevel[indCount]:
-        #print(r)
-        #f.write(labels[r])
-    #else:
-        #f.write("no label")
-    f.write("label")
+    if relationships.index(r) in relationLevel:
+        f.write(labels[labelCount])
+        labelCount += 1
+    else:
+        f.write("no label")
+    #f.write("label")
     f.write(", [")
     f.write(m1[multiplicityCount])
     f.write(", ")
