@@ -7,65 +7,23 @@ import { apiGetStuCourse, apiSubmitStuCourse } from "../../utils/api";
 const user = JSON.parse(localStorage.getItem("user") || "{}");
 
 export default function Index() {
-  const dataSource = [
-    {
-      name: "Aries",
-      email: "zhajy154@mymail.unisa.edu.au",
-      password: "student1",
-      course: ["Systems Design", ", Web Technology"],
-      assignment_id: "week1",
-      submission_status: "1",
-      date: "",
-      grade: "",
-    },
-    {
-      name: "Li",
-      email: "liyzy092@mymail.unisa.edu.au",
-      password: "student2",
-      course: ["Python Programing"],
-      assignment_id: "week1",
-      submission_status: "2",
-      date: "",
-      grade: "",
-    },
-    {
-      name: "April",
-      email: "laumy037@mymail.unisa.edu.au",
-      password: "student3",
-      course: ["Data Structures", ", Database for the Enterprise"],
-      assignment_id: "week1",
-      submission_status: "2",
-      date: "",
-      grade: "",
-    },
-    {
-      name: "McCulloch",
-      email: "mcclt001@mymail.unisa.edu.au",
-      password: "student4",
-      course: ["Python Programing", ", Systems Design"],
-      assignment_id: "week1",
-      submission_status: "1",
-      date: "",
-      grade: "",
-    },
-  ];
-
   const [list, setList] = useState([]);
 
   const [fileList, setFileList] = useState([]);
 
-  const uploadProps = {
-    showUploadList: false,
-    fileList,
-  };
-
   const submitFile = (param) => {
     console.log("param -> :", param);
+    console.log("fileList -> :", fileList);
+
     const name = new FormData();
-    name.append("file", param.file);
+
+    fileList.forEach((file) => {
+      name.append("file[]", file);
+    });
     name.append("homework_name", param.homework_name);
     name.append("homework_course", param.homework_course);
     name.append("homework_user", param.homework_user);
+
     apiSubmitStuCourse(name).then((res) => {
       console.log("res -> :", res);
     });
@@ -79,13 +37,13 @@ export default function Index() {
     },
     {
       title: "homework_name",
-      dataIndex: "homework_name",
-      key: "homework_name",
+      dataIndex: "course_homework",
+      key: "course_homework",
     },
     {
       title: "Course",
-      dataIndex: "homework_course",
-      key: "homework_course",
+      dataIndex: "course_name",
+      key: "course_name",
     },
     // {
     //   title: "Current Status",
@@ -103,25 +61,63 @@ export default function Index() {
       render: (row) => {
         return (
           <>
-            <Upload
-              {...uploadProps}
-              beforeUpload={(file) => {
-                console.log("file -> :", file);
-                const { homework_name, homework_course, homework_user } = row;
+            {!row.submit && (
+              <Upload
+                showUploadList={false}
+                name="file"
+                action="/api/user/submit_homework"
+                fileList={fileList}
+                accept={".jpg, .jpeg, .png,.uxl"}
+                onChange={(info) => {
+                  if (info.file.status !== "uploading") {
+                    console.log(info.file, info.fileList);
+                  }
+                  if (info.file.status === "done") {
+                    message.success(
+                      `${info.file.name} file uploaded successfully`
+                    );
+                    getList();
+                  } else if (info.file.status === "error") {
+                    message.error(`${info.file.name} file upload failed.`);
+                  }
+                }}
+                data={() => {
+                  return {
+                    homework_name: row.course_homework,
+                    homework_course: row.course_name,
+                    homework_user: user.username,
+                  };
+                }}
+                beforeUpload={(file) => {
+                  if (
+                    file.type !== "image/png" &&
+                    file.type !== "image/jpeg" &&
+                    file.type !== "image/jpg" &&
+                    !file.name.includes(".uxl")
+                  ) {
+                    message.error(`${file.name} must is png,jpg,uxl file`);
+                    return false;
+                  }
 
-                submitFile({
-                  file,
-                  homework_name,
-                  homework_course,
-                  homework_user,
-                });
-                return false;
-              }}
-            >
-              <Button>Submiting</Button>
-            </Upload>
+                  // setFileList([...fileList, file]);
+
+                  // const {
+                  //   course_homework: homework_name,
+                  //   course_name: homework_course,
+                  // } = row;
+
+                  // submitFile({
+                  //   homework_name,
+                  //   homework_course,
+                  //   homework_user: user.username,
+                  // });
+                }}
+              >
+                <Button>Submiting</Button>
+              </Upload>
+            )}
             &nbsp; &nbsp;
-            {row.homework_score != "未批改" && (
+            {row.submit && (
               <Button type="link" href={row.homework_content} target="_blank">
                 Faceback
               </Button>
@@ -146,10 +142,11 @@ export default function Index() {
 
   const getList = () => {
     apiGetStuCourse({
-      homework_user: user.username,
-      homework_course: form.getFieldValue("course"),
+      username: user.username,
+      course_name: form.getFieldValue("course"),
     }).then((res) => {
-      setList(res.data?.homeworks || []);
+      console.log("res -> :", res);
+      setList(res.data?.courses || []);
     });
   };
 
@@ -185,7 +182,7 @@ export default function Index() {
       <br />
       <br />
 
-      <Table rowKey="email" dataSource={list} columns={columns} />
+      <Table rowKey="id" dataSource={list} columns={columns} />
     </>
   );
 }

@@ -338,13 +338,13 @@ def submit_homework():
             return jsonify(response_data), 500
 
         # 创建新作业
-        homework = Homework(homework_content='/www/wwwroot/api/' + file.filename, homework_name=homework_name,
+        homework = Homework(homework_content=r'C:\ColaZ\jd\flaskclass' + file.filename, homework_name=homework_name,
                             homework_course=homework_course, homework_time=homework_time,
                             homework_user=homework_user, homework_score="未批改")
         # 保存文件
-        path = '/www/wwwroot/api/'
+        path = r'C:\ColaZ\jd\flaskclass'
         file.save(os.path.join(path, file.filename))
-        # 将新作业添加到数据库中
+        # 将新作业添加到数据库中    
         db.session.add(homework)
         db.session.commit()
 
@@ -663,6 +663,7 @@ def query_homework_by_course():
 
         # 从JSON数据中提取课程信息
         course_name = request_data.get('course_name')
+        username = request_data.get('username')
 
         # 查询学生课程是否存在
         sql = text("select * from course_homework where course_name = :course_name")
@@ -686,6 +687,14 @@ def query_homework_by_course():
                     "course_name": row[1],
                     "course_homework": row[2]
                 }
+                # 查询学生是否已经提交该作业
+                sql = text("select * from homework where homework_course = :homework_course and homework_user = :homework_user and homework_name = :homework_name")
+                result = db.session.execute(sql, {"homework_course": course_name, "homework_user": username, "homework_name": row[2]})
+                homeworks = result.fetchone()
+                if homeworks is None:
+                    course_dict["submit"] = False
+                else:
+                    course_dict["submit"] = True
                 courses_list.append(course_dict)
 
         # 返回成功的JSON响应
@@ -705,7 +714,6 @@ def query_homework_by_course():
             "data": {}
         }
         return jsonify(response_data), 200
-
 
 # 学生注册课程
 @app.route('/user/register_course', methods=['POST'])
