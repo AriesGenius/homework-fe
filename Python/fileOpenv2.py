@@ -1,3 +1,5 @@
+import re
+
 # file must first be converted to a text file.
 file = input("Please input the location of the file to open: ")
 
@@ -9,6 +11,16 @@ file_list = []
 
 # the string which represents the types of relationships
 relationshipArrow = "lt"
+
+# the string which represents relationships
+relationship = "<id>Relation</id>"
+relationCount = -1
+relationLevel = []
+
+# arrows for relationship labels
+labelArrow1 = "&lt; "
+labelArrow2 = " &gt"
+
 # a list for counting how many times the relationshipArrow string is seen
 arrowCount = []
 
@@ -33,6 +45,10 @@ yCoordinate = []
 wCoordinate = []
 hCoordinate = []
 
+# attribute and method count lists.
+attributeCountList = []
+methodCountList = []
+
 # *..* 1..* etc
 m1_numbers = "m1"
 m2_numbers = "m2"
@@ -44,9 +60,18 @@ m2 = []
 # attributes
 attributes = "--"
 attributesList = []
+newAttributesList = []
+attributeType = []
 
+# methods
 methods = "("
 methodsList = []
+
+labels = []
+
+# additional attribuutes
+relationshipLocation = "<additional_attributes>"
+directionList = []
 
 for line in fileOpen:
 
@@ -65,6 +90,16 @@ for line in fileOpen:
                 count = count + 0.1
         arrowCount.append(count)
 
+    # counting the number of relationships
+    if relationship in line:
+        relationCount += 1
+
+    # appending the labels to a list
+    if labelArrow1 in line or labelArrow2 in line:
+        labels.append(line)
+        print(relationCount)
+        relationLevel.append(relationCount)
+
     # appending the coordinates if they are found in the line of the file.
     elif xCoordinateStart in line:
         xCoordinate.append(line)
@@ -76,7 +111,7 @@ for line in fileOpen:
         hCoordinate.append(line)
 
     # appending the class name it is found in the line of the file
-    elif className in line:
+    elif className in line and relationshipArrow not in line:
         classes.append(line)
 
     # appending the lines that m1 and m2 are in to the lists.
@@ -85,18 +120,31 @@ for line in fileOpen:
     elif m2_numbers in line:
         m2.append(line)
 
-    # appending attributes to list.
-    #elif attributes in line:
-    #    attributesList.append(line)
+    # appending the start and finish locations of relationships to list
+    elif relationshipLocation in line:
+        directionList.append(line)
 
+    # appending attributes and methods to lists
 indexCount = 0
 while indexCount < len(file_list):
     if attributes in file_list[indexCount] and methods not in file_list[indexCount + 1]:
-        attributesList.append(file_list[(indexCount + 1)])
+        attributesIndex = 1
+        attributeCount = 0
+        while attributes not in file_list[(indexCount + attributesIndex)] and "</panel_attributes>" not in file_list[(indexCount + attributesIndex)]:
+            attributesList.append(file_list[(indexCount + attributesIndex)])
+            newAttributesList.append(file_list[(indexCount + attributesIndex)])
+            attributeType.append(file_list[(indexCount + attributesIndex)])
+            attributesIndex += 1
+            attributeCount += 1
+        attributeCountList.append(attributeCount)
     elif attributes in file_list[indexCount] and methods in file_list[indexCount + 1]:
-        methodsList.append(file_list[(indexCount + 1)])
-        if attributes in file_list[indexCount] and methods in file_list[indexCount + 2]:
-            methodsList.append(file_list[(indexCount + 2)])
+        methodsIndex = 1
+        methodCount = 0
+        while methods in file_list[indexCount + methodsIndex]:
+            methodsList.append(file_list[(indexCount + methodsIndex)])
+            methodsIndex += 1
+            methodCount += 1
+        methodCountList.append(methodCount)
     indexCount += 1
 
 newClasses = [name.replace("<panel_attributes>", "") for name in classes]
@@ -107,20 +155,20 @@ print(arrowCount)
 relationships = []
 
 # The different numbers represent what type of relationship
-for index in arrowCount:
-    if index == 2:
+for ind in arrowCount:
+    if ind == 2:
         relationships.append("Inheritance")
-    elif index == 0:
+    elif ind == 0:
         relationships.append("Association")
-    elif index == 2.1:
+    elif ind == 2.1:
         relationships.append("Realisation")
-    elif index == 1.1:
+    elif ind == 1.1:
         relationships.append("Dependency")
-    elif index == 3:
+    elif ind == 3:
         relationships.append("Directed Association")
-    elif index == 4:
+    elif ind == 4:
         relationships.append("Aggregation")
-    elif index == 5:
+    elif ind == 5:
         relationships.append("Composition")
 
 # characters to be removed from the lists.
@@ -138,6 +186,17 @@ star = "*"
 m1Code = "m1="
 m2Code = "m2="
 panelAttributes = "</panel_attributes>"
+additionalAttributes1 = "    <additional_attributes>"
+additionalAttributes2 = "</additional_attributes>"
+minus = "-"
+plus = "+"
+date = "date"
+dateTime = "DateTime"
+string = "str"
+bool = "bool"
+twoDots = ":"
+leftArrow = "&lt;"
+rightArrow = "&gt;"
 
 # for loops using replace statements to remove the
 # previously stated characters.
@@ -224,6 +283,62 @@ for idx, ele in enumerate(methodsList):
 for idx, ele in enumerate(methodsList):
     methodsList[idx] = ele.replace(letter2, '')
 
+for idx, ele in enumerate(directionList):
+    directionList[idx] = ele.replace(additionalAttributes1, '')
+for idx, ele in enumerate(directionList):
+    directionList[idx] = ele.replace(additionalAttributes2, '')
+for idx, ele in enumerate(directionList):
+    directionList[idx] = ele.replace(letter2, '')
+
+for idx, ele in enumerate(newAttributesList):
+    newAttributesList[idx] = ele.replace(minus, '')
+for idx, ele in enumerate(newAttributesList):
+    newAttributesList[idx] = ele.replace(plus, '')
+for idx, ele in enumerate(newAttributesList):
+    newAttributesList[idx] = ele.replace(date, '')
+for idx, ele in enumerate(newAttributesList):
+    newAttributesList[idx] = ele.replace(dateTime, '')
+for idx, ele in enumerate(newAttributesList):
+    newAttributesList[idx] = ele.replace(string, '')
+for idx, ele in enumerate(newAttributesList):
+    newAttributesList[idx] = ele.replace(bool, '')
+for idx, ele in enumerate(newAttributesList):
+    newAttributesList[idx] = ele.replace(twoDots, '')
+for idx, ele in enumerate(newAttributesList):
+    newAttributesList[idx] = ele.replace(letter2, '')
+
+attributeVis = []
+
+for t in attributesList:
+    if "+" in t:
+        attributeVis.append("+")
+    elif "-" in t:
+        attributeVis.append("-")
+    elif "#" in t:
+        attributeVis.append("#")
+
+attributeTypes = []
+
+for k in attributeType:
+    ch = ":"
+    if ch in k:
+        listOfChars = k.split(ch, 1)
+        if len(listOfChars) > 0:
+            k = listOfChars[1]
+            attributeTypes.append(k)
+
+for idx, ele in enumerate(attributeTypes):
+    attributeTypes[idx] = ele.replace(letter2, '')
+
+for idx, ele in enumerate(labels):
+    labels[idx] = ele.replace(letter2, '')
+for idx, ele in enumerate(labels):
+    labels[idx] = ele.replace(panelAttributes, '')
+for idx, ele in enumerate(labels):
+    labels[idx] = ele.replace(leftArrow, '<')
+for idx, ele in enumerate(labels):
+    labels[idx] = ele.replace(rightArrow, '>')
+
 # printing everything
 print("The relationships are", relationships)
 
@@ -238,4 +353,99 @@ print("The m1's are:", m1)
 print("The m2's are:", m2)
 
 print("The attributes are:", attributesList)
+print("The attributes are:", newAttributesList)
 print("The methods are:", methodsList)
+
+print(directionList)
+
+print("attribute count list:", attributeCountList)
+print("method count list:", methodCountList)
+
+print("the attribute visibilities are:", attributeVis)
+print("the attribute types are:", attributeTypes)
+
+print("the labels are:", labels)
+print("relationship labels level:", relationLevel)
+
+f = open("classFormat.txt", "w")
+
+writeCount = 0
+c = 0
+classIndex = 0
+attributesTotal = 0
+for x in newClasses:
+    f.write("ClassComponent(")
+    f.write(x)
+    f.write(",[")
+    while newClasses.index(x) == classIndex:
+        if classIndex == 0:
+            while c < attributeCountList[writeCount]:
+                f.write(newAttributesList[c])
+                if c != (attributeCountList[writeCount] - 1):
+                    f.write(", ")
+                c += 1
+            classIndex += 1
+        else:
+            while c >= attributesTotal and c < (attributesTotal + attributeCountList[writeCount]):
+                f.write(newAttributesList[c])
+                if c != (attributesTotal + attributeCountList[writeCount] - 1):
+                    f.write(", ")
+                c += 1
+            classIndex += 1
+        attributesTotal += attributeCountList[writeCount]
+    f.write("])")
+    f.write("\n")
+    writeCount += 1
+
+f.write("\n")
+
+indCount = 0
+multiplicityCount = 0
+labelCount = 0
+for r in relationships:
+    f.write("RelationshipComponent(")
+    f.write(r)
+    f.write(", ")
+    f.write("SourceClass")
+    f.write(", ")
+    f.write("TargetClass")
+    f.write(", ")
+    if relationships.index(r) in relationLevel:
+        f.write(labels[labelCount])
+        labelCount += 1
+    else:
+        f.write("no label")
+    #f.write("label")
+    f.write(", [")
+    f.write(m1[multiplicityCount])
+    f.write(", ")
+    f.write(m2[multiplicityCount])
+    f.write("])")
+    f.write("\n")
+    multiplicityCount += 1
+    indCount += 1
+
+f.write("\n")
+
+c1 = 0
+c2 = 0
+lengthValue = 0
+
+for a in newAttributesList:
+    f.write("AttributeComponent(")
+    f.write(a)
+    f.write(", ")
+    if len(attributeTypes) > lengthValue:
+        f.write(attributeTypes[c2])
+    else:
+        f.write("noAttributeType")
+    f.write(", ")
+    if len(attributeVis) > lengthValue:
+        f.write(attributeVis[c1])
+    else:
+        f.write("noAttributeVis")
+    f.write(")")
+    f.write("\n")
+    c1 += 1
+    c2 += 1
+    lengthValue += 1

@@ -1,4 +1,4 @@
-file=load(C:\Users\make1\OneDrive\Desktop\Ituor\Test.uxf)
+file=load(C\Users\make1\OneDrive\Desktop\Ituor\bonj007_domain1.uxf)
 fileOpen = open(file, "r")    
 relationshipArrow = "lt"
 arrowCount = []
