@@ -61,61 +61,59 @@ export default function Index() {
       render: (row) => {
         return (
           <>
-            {!row.submit && (
-              <Upload
-                showUploadList={false}
-                name="file"
-                action="/api/user/submit_homework"
-                fileList={fileList}
-                accept={".jpg, .jpeg, .png,.uxl"}
-                onChange={(info) => {
-                  if (info.file.status !== "uploading") {
-                    console.log(info.file, info.fileList);
-                  }
-                  if (info.file.status === "done") {
-                    message.success(
-                      `${info.file.name} file uploaded successfully`
-                    );
-                    getList();
-                  } else if (info.file.status === "error") {
-                    message.error(`${info.file.name} file upload failed.`);
-                  }
-                }}
-                data={() => {
-                  return {
-                    homework_name: row.course_homework,
-                    homework_course: row.course_name,
-                    homework_user: user.username,
-                  };
-                }}
-                beforeUpload={(file) => {
-                  if (
-                    file.type !== "image/png" &&
-                    file.type !== "image/jpeg" &&
-                    file.type !== "image/jpg" &&
-                    !file.name.includes(".uxl")
-                  ) {
-                    message.error(`${file.name} must is png,jpg,uxl file`);
-                    return false;
-                  }
+            <Upload
+              showUploadList={false}
+              name="file"
+              action="/api/user/submit_homework"
+              fileList={fileList}
+              accept={".jpg, .jpeg, .png,.uxl"}
+              onChange={(info) => {
+                if (info.file.status !== "uploading") {
+                  console.log(info.file, info.fileList);
+                }
+                if (info.file.status === "done") {
+                  message.success(
+                    `${info.file.name} file uploaded successfully`
+                  );
+                  getList();
+                } else if (info.file.status === "error") {
+                  message.error(`${info.file.name} file upload failed.`);
+                }
+              }}
+              data={() => {
+                return {
+                  homework_name: row.course_homework,
+                  homework_course: row.course_name,
+                  homework_user: user.username,
+                };
+              }}
+              beforeUpload={(file) => {
+                if (
+                  file.type !== "image/png" &&
+                  file.type !== "image/jpeg" &&
+                  file.type !== "image/jpg" &&
+                  !file.name.includes(".uxl")
+                ) {
+                  message.error(`${file.name} must is png,jpg,uxl file`);
+                  return false;
+                }
 
-                  // setFileList([...fileList, file]);
+                // setFileList([...fileList, file]);
 
-                  // const {
-                  //   course_homework: homework_name,
-                  //   course_name: homework_course,
-                  // } = row;
+                // const {
+                //   course_homework: homework_name,
+                //   course_name: homework_course,
+                // } = row;
 
-                  // submitFile({
-                  //   homework_name,
-                  //   homework_course,
-                  //   homework_user: user.username,
-                  // });
-                }}
-              >
-                <Button>Submiting</Button>
-              </Upload>
-            )}
+                // submitFile({
+                //   homework_name,
+                //   homework_course,
+                //   homework_user: user.username,
+                // });
+              }}
+            >
+              <Button>Submiting</Button>
+            </Upload>
             &nbsp; &nbsp;
             {row.submit && (
               <Button type="link" href={row.homework_content} target="_blank">
