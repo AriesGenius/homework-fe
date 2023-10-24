@@ -3,6 +3,10 @@ import re
 def main():
     correct_filelocation = input("Please input the location of the correct file to open: ")
     wrong_filelocation = input("wrong file")
+    Correct_array =[]
+    wrong_array = []
+
+    
     
 
     try:
@@ -13,6 +17,7 @@ def main():
             correct_fileOpen = open(correct_filelocation, "r")
 
             correct_file_list = []
+            
 
             # the string which represents the types of relationships
             relationshipArrow = "lt"
@@ -344,33 +349,24 @@ def main():
             for idx, ele in enumerate(labels):
                 labels[idx] = ele.replace(rightArrow, '>')
 
-            # printing everything
-            print("The relationships are", relationships)
+            Correct_array.append("The relationships are " + str(relationships))
+            Correct_array.append("The x coordinates are: " + str(xCoordinate))
+            Correct_array.append("The y coordinates are: " + str(yCoordinate))
+            Correct_array.append("The w coordinates are: " + str(wCoordinate))
+            Correct_array.append("The h coordinates are: " + str(hCoordinate))
+            Correct_array.append("The classes are: " + str(newClasses))
+            Correct_array.append("The m1's are: " + str(m1))
+            Correct_array.append("The m2's are: " + str(m2))
+            Correct_array.append("The attributes are: " + str(attributesList))
+            Correct_array.append("The attributes are: " + str(newAttributesList))
+            Correct_array.append("The methods are: " + str(methodsList))
+            Correct_array.append("attribute count list: " + str(attributeCountList))
+            Correct_array.append("method count list: " + str(methodCountList))
+            Correct_array.append("the attribute visibilities are: " + str(attributeVis))
+            Correct_array.append("the attribute types are: " + str(attributeTypes))
+            Correct_array.append("the labels are: " + str(labels))
+            Correct_array.append("relationship labels level: " + str(relationLevel))
 
-            print("The x coordinates are:", xCoordinate)
-            print("The y coordinates are:", yCoordinate)
-            print("The w coordinates are:", wCoordinate)
-            print("The h coordinates are:", hCoordinate)
-
-            print("The classes are:", newClasses)
-
-            print("The m1's are:", m1)
-            print("The m2's are:", m2)
-
-            print("The attributes are:", attributesList)
-            print("The attributes are:", newAttributesList)
-            print("The methods are:", methodsList)
-
-            print(directionList)
-
-            print("attribute count list:", attributeCountList)
-            print("method count list:", methodCountList)
-
-            print("the attribute visibilities are:", attributeVis)
-            print("the attribute types are:", attributeTypes)
-
-            print("the labels are:", labels)
-            print("relationship labels level:", relationLevel)
 
             f = open("classFormat.txt", "w")
 
@@ -455,27 +451,15 @@ def main():
                 c2 += 1
                 lengthValue += 1
 
-
-
-
-
-
-
-
-
-
-
-
-
             
-            print("______________________________________Answer file reading")
     
         with open(wrong_filelocation, "r") as wrong_fileOpen:
             
-  # read the file
+            # read the file
             wrong_fileOpen = open(wrong_filelocation, "r")
 
             wrong_file_list = []
+            
 
             # the string which represents the types of relationships
             relationshipArrow = "lt"
@@ -808,33 +792,24 @@ def main():
                 labels[idx] = ele.replace(rightArrow, '>')
 
             # printing everything
-            print("The relationships are", relationships)
-
-            print("The x coordinates are:", xCoordinate)
-            print("The y coordinates are:", yCoordinate)
-            print("The w coordinates are:", wCoordinate)
-            print("The h coordinates are:", hCoordinate)
-
-            print("The classes are:", newClasses)
-
-            print("The m1's are:", m1)
-            print("The m2's are:", m2)
-
-            print("The attributes are:", attributesList)
-            print("The attributes are:", newAttributesList)
-            print("The methods are:", methodsList)
-
-            print(directionList)
-
-            print("attribute count list:", attributeCountList)
-            print("method count list:", methodCountList)
-
-            print("the attribute visibilities are:", attributeVis)
-            print("the attribute types are:", attributeTypes)
-
-            print("the labels are:", labels)
-            print("relationship labels level:", relationLevel)
-
+         
+            wrong_array.append("The relationships are " + str(relationships))
+            wrong_array.append("The x coordinates are: " + str(xCoordinate))
+            wrong_array.append("The y coordinates are: " + str(yCoordinate))
+            wrong_array.append("The w coordinates are: " + str(wCoordinate))
+            wrong_array.append("The h coordinates are: " + str(hCoordinate))
+            wrong_array.append("The classes are: " + str(newClasses))
+            wrong_array.append("The m1's are: " + str(m1))
+            wrong_array.append("The m2's are: " + str(m2))
+            wrong_array.append("The attributes are: " + str(attributesList))
+            wrong_array.append("The attributes are: " + str(newAttributesList))
+            wrong_array.append("The methods are: " + str(methodsList))
+            wrong_array.append("attribute count list: " + str(attributeCountList))
+            wrong_array.append("method count list: " + str(methodCountList))
+            wrong_array.append("the attribute visibilities are: " + str(attributeVis))
+            wrong_array.append("the attribute types are: " + str(attributeTypes))
+            wrong_array.append("the labels are: " + str(labels))
+            wrong_array.append("relationship labels level: " + str(relationLevel))
             f = open("classFormat.txt", "w")
 
             writeCount = 0
@@ -917,11 +892,30 @@ def main():
                 c1 += 1
                 c2 += 1
                 lengthValue += 1
+                
+            for item in Correct_array:
+                print(item)
+            print("______________________________________Answer file reading")
+            for item in wrong_array:
+                print(item)
 
+            print("_______________________________________________-user file reading")
+
+            # Compare the two arrays
+            if Correct_array == wrong_array:
+                print("Correct and wrong arrays are equal.")
+            else:
+                print("Correct and wrong arrays are different.")
+
+           
 
 
     except FileNotFoundError:
         print("File not found. Please check the file location.")
+
+    
+
+    
         
 
 if __name__ == "__main__":
