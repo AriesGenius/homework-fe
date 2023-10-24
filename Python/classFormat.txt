@@ -1,11 +1,6 @@
-ClassComponent(ikarim,[time, day])
-ClassComponent(Calendar,[time])
-ClassComponent(Meeting,[startTime])
-ClassComponent(Contact,[name])
 
-RelationshipComponent(Aggregation, SourceClass, TargetClass, < has, [0..*, 0..*])
-RelationshipComponent(Dependency, SourceClass, TargetClass, no label, [0..*, 0..*])
-RelationshipComponent(Composition, SourceClass, TargetClass, has >, [0..*, 3..8])
+RelationshipComponent(Aggregation, SourceClass, TargetClass, no label, [0..*, 0..*])
+RelationshipComponent(Realisation, SourceClass, TargetClass, < has<additional_attributes>130;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>670</x><y>170</y><w>50</w><h>140</h></coordinates><panel_attributes>lt=.>, [0..*, 3..8])
 
 AttributeComponent(time, date, -)
 AttributeComponent(day, date, +)

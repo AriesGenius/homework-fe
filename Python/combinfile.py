@@ -1,23 +1,17 @@
 import re
-
-def main():
-    correct_filelocation = input("Please input the location of the correct file to open: ")
-    wrong_filelocation = input("wrong file")
-    Correct_array =[]
-    wrong_array = []
-
+def process_data(correct_filelocation):
+    answer_array =[]
+    user_answer_array = []
     
     
-
     try:
         with open(correct_filelocation, "r") as correct_fileOpen:
-            
+                
             # existing code here ...
             # read the file
             correct_fileOpen = open(correct_filelocation, "r")
-
             correct_file_list = []
-            
+                
 
             # the string which represents the types of relationships
             relationshipArrow = "lt"
@@ -26,19 +20,15 @@ def main():
             relationship = "<id>Relation</id>"
             relationCount = -1
             relationLevel = []
-
             # arrows for relationship labels
             labelArrow1 = "&lt; "
             labelArrow2 = " &gt"
-
             # a list for counting how many times the relationshipArrow string is seen
             arrowCount = []
-
             # the string which represents the class names in the file
             className = "    <panel_attributes>"
             # a list for all the class names
             classes = []
-
             # the strings representing where the coordinates of classes and arrows are in the file
             xCoordinateStart = "<x>"
             yCoordinateStart = "<y>"
@@ -349,23 +339,23 @@ def main():
             for idx, ele in enumerate(labels):
                 labels[idx] = ele.replace(rightArrow, '>')
 
-            Correct_array.append("The relationships are " + str(relationships))
-            Correct_array.append("The x coordinates are: " + str(xCoordinate))
-            Correct_array.append("The y coordinates are: " + str(yCoordinate))
-            Correct_array.append("The w coordinates are: " + str(wCoordinate))
-            Correct_array.append("The h coordinates are: " + str(hCoordinate))
-            Correct_array.append("The classes are: " + str(newClasses))
-            Correct_array.append("The m1's are: " + str(m1))
-            Correct_array.append("The m2's are: " + str(m2))
-            Correct_array.append("The attributes are: " + str(attributesList))
-            Correct_array.append("The attributes are: " + str(newAttributesList))
-            Correct_array.append("The methods are: " + str(methodsList))
-            Correct_array.append("attribute count list: " + str(attributeCountList))
-            Correct_array.append("method count list: " + str(methodCountList))
-            Correct_array.append("the attribute visibilities are: " + str(attributeVis))
-            Correct_array.append("the attribute types are: " + str(attributeTypes))
-            Correct_array.append("the labels are: " + str(labels))
-            Correct_array.append("relationship labels level: " + str(relationLevel))
+            answer_array.append("The relationships are " + str(relationships))
+            #answer_array.append("The x coordinates are: " + str(xCoordinate))
+            #answer_array.append("The y coordinates are: " + str(yCoordinate))
+            #answer_array.append("The w coordinates are: " + str(wCoordinate))
+            #answer_array.append("The h coordinates are: " + str(hCoordinate))
+            answer_array.append("The classes are: " + str(newClasses))
+            answer_array.append("The m1's are: " + str(m1))
+            answer_array.append("The m2's are: " + str(m2))
+            answer_array.append("The attributes are: " + str(attributesList))
+            answer_array.append("The attributes are: " + str(newAttributesList))
+            #answer_array.append("The methods are: " + str(methodsList))
+            answer_array.append("attribute count list: " + str(attributeCountList))
+            answer_array.append("method count list: " + str(methodCountList))
+            answer_array.append("the attribute visibilities are: " + str(attributeVis))
+            answer_array.append("the attribute types are: " + str(attributeTypes))
+            answer_array.append("the labels are: " + str(labels))
+            answer_array.append("relationship labels level: " + str(relationLevel))
 
 
             f = open("classFormat.txt", "w")
@@ -451,14 +441,16 @@ def main():
                 c2 += 1
                 lengthValue += 1
 
-            
-    
-        with open(wrong_filelocation, "r") as wrong_fileOpen:
-            
-            # read the file
-            wrong_fileOpen = open(wrong_filelocation, "r")
+            return answer_array
 
-            wrong_file_list = []
+                
+        
+            with open(wrong_filelocation, "r") as wrong_fileOpen:
+                
+                # read the file
+                wrong_fileOpen = open(wrong_filelocation, "r")
+
+                wrong_file_list = []
             
 
             # the string which represents the types of relationships
@@ -468,19 +460,15 @@ def main():
             relationship = "<id>Relation</id>"
             relationCount = -1
             relationLevel = []
-
             # arrows for relationship labels
             labelArrow1 = "&lt; "
             labelArrow2 = " &gt"
-
             # a list for counting how many times the relationshipArrow string is seen
             arrowCount = []
-
             # the string which represents the class names in the file
             className = "    <panel_attributes>"
             # a list for all the class names
             classes = []
-
             # the strings representing where the coordinates of classes and arrows are in the file
             xCoordinateStart = "<x>"
             yCoordinateStart = "<y>"
@@ -791,25 +779,25 @@ def main():
             for idx, ele in enumerate(labels):
                 labels[idx] = ele.replace(rightArrow, '>')
 
-            # printing everything
-         
-            wrong_array.append("The relationships are " + str(relationships))
-            wrong_array.append("The x coordinates are: " + str(xCoordinate))
-            wrong_array.append("The y coordinates are: " + str(yCoordinate))
-            wrong_array.append("The w coordinates are: " + str(wCoordinate))
-            wrong_array.append("The h coordinates are: " + str(hCoordinate))
-            wrong_array.append("The classes are: " + str(newClasses))
-            wrong_array.append("The m1's are: " + str(m1))
-            wrong_array.append("The m2's are: " + str(m2))
-            wrong_array.append("The attributes are: " + str(attributesList))
-            wrong_array.append("The attributes are: " + str(newAttributesList))
-            wrong_array.append("The methods are: " + str(methodsList))
-            wrong_array.append("attribute count list: " + str(attributeCountList))
-            wrong_array.append("method count list: " + str(methodCountList))
-            wrong_array.append("the attribute visibilities are: " + str(attributeVis))
-            wrong_array.append("the attribute types are: " + str(attributeTypes))
-            wrong_array.append("the labels are: " + str(labels))
-            wrong_array.append("relationship labels level: " + str(relationLevel))
+            user_answer_array.append("The relationships are " + str(relationships))
+            #user_answer_array.append("The x coordinates are: " + str(xCoordinate))
+            #user_answer_array.append("The y coordinates are: " + str(yCoordinate))
+            #user_answer_array.append("The w coordinates are: " + str(wCoordinate))
+            #user_answer_array.append("The h coordinates are: " + str(hCoordinate))
+            user_answer_array.append("The classes are: " + str(newClasses))
+            user_answer_array.append("The m1's are: " + str(m1))
+            user_answer_array.append("The m2's are: " + str(m2))
+            user_answer_array.append("The attributes are: " + str(attributesList))
+            user_answer_array.append("The attributes are: " + str(newAttributesList))
+            #user_answer_array.append("The methods are: " + str(methodsList))
+            user_answer_array.append("attribute count list: " + str(attributeCountList))
+            user_answer_array.append("method count list: " + str(methodCountList))
+            user_answer_array.append("the attribute visibilities are: " + str(attributeVis))
+            user_answer_array.append("the attribute types are: " + str(attributeTypes))
+            user_answer_array.append("the labels are: " + str(labels))
+            user_answer_array.append("relationship labels level: " + str(relationLevel))
+
+
             f = open("classFormat.txt", "w")
 
             writeCount = 0
@@ -893,21 +881,12 @@ def main():
                 c2 += 1
                 lengthValue += 1
                 
-            for item in Correct_array:
-                print(item)
-            print("______________________________________Answer file reading")
-            for item in wrong_array:
-                print(item)
 
-            print("_______________________________________________-user file reading")
+            return user_answer_array
+                    
+              
 
-            # Compare the two arrays
-            if Correct_array == wrong_array:
-                print("Correct and wrong arrays are equal.")
-            else:
-                print("Correct and wrong arrays are different.")
-
-           
+               
 
 
     except FileNotFoundError:
@@ -916,7 +895,72 @@ def main():
     
 
     
-        
+def feedback_function(answer_array, user_answer_array, attempt_number):
+  """Generates feedback for a user based on their attempts.
+
+  Args:
+    answer_array: A list of the correct answers.
+    user_answer_array: A list of the user's answers.
+    attempt_number: The number of the user's attempt.
+
+  Returns:
+    A string containing the feedback.
+  """
+  
+  # First attempt: General and summary feedback.
+  if attempt_number == 1:
+    feedback = "Overall, your first attempt was good. You were able to identify the main components of the system. However, there are a few areas where you could improve. "
+
+  # Second attempt: More detailed feedback, such as checking components and attribute types.
+  elif attempt_number == 2:
+    feedback = "Your second attempt was better than your first. You were able to identify more components and their relationships. However, there are still a few areas where you could improve."
+
+  # Last attempt: More detailed feedback, but don't show the answer directly.
+  else:
+    feedback = "Your last attempt was the best. You were able to identify almost all of the components and their relationships. "
+
+  # Add specific feedback based on the user's attempts.
+  for i in range(len(answer_array)):
+    if user_answer_array[i] is None:
+      feedback += "\n- You missed the components. "
+    elif user_answer_array[i] != answer_array[i]:
+      feedback += "\n- The component is not correct showing as below. "
+      for j in range(len(answer_array[i])):
+        try:
+          if answer_array[i][j] != user_answer_array[i][j]:
+            feedback += "\n- The {} component is not correct. ".format(user_answer_array[i][0])
+            for j in range(len(answer_array[i])):
+              if answer_array[i][j] != user_answer_array[i][j]:
+                if j == 0:
+                  feedback += "\n- in "+user_answer_array[i][0]+" Name wrong but okay "
+                elif j == 1:
+                  feedback += "\n- in "+user_answer_array[i][0]+" Attribute type wrong "
+                elif j == 2:
+                  feedback += "\n- in "+user_answer_array[i][0]+" Attribute visibility wrong "
+                else:
+                  feedback += "\n- {} != {}".format(answer_array[i][j], user_answer_array[i][j])
+        except IndexError:
+                pass
+
+
+  return feedback
+
+def main():
+ 
+    correct_filelocation = input("Please input the location of the correct file to open: ")
+    wrong_filelocation = input("wrong file location")
+    answer_array = process_data(correct_filelocation)
+    user_answer_array= process_data(wrong_filelocation)
+    for item in answer_array:
+        print(item)
+    print("_________________________________")
+    for item2 in user_answer_array:
+        print(item2)
+    print("---------------------------------------The different--------------------------------------")
+    feedback = feedback_function(answer_array, user_answer_array,1)
+    print(feedback)
+    
+    
 
 if __name__ == "__main__":
     main()
