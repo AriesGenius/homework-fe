@@ -1,0 +1,14 @@
+
+
+sComponent(Staff,[staffID, firstName, surname, designation])
+ClassComponent(Property,[propertyNo, availableFrom, rentAmount])
+
+RelationshipComponent(Association, SourceClass, TargetClass, oversees >, [0..1, 0..*])
+
+AttributeComponent(staffID, noAttributeType, noAttributeVis)
+AttributeComponent(firstName, noAttributeType, noAttributeVis)
+AttributeComponent(surname, noAttributeType, noAttributeVis)
+AttributeComponent(designation, noAttributeType, noAttributeVis)
+AttributeComponent(propertyNo, noAttributeType, noAttributeVis)
+AttributeComponent(availableFrom, noAttributeType, noAttributeVis)
+AttributeComponent(rentAmount, noAttributeType, noAttributeVis)
