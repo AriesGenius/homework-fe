@@ -1,19 +1,18 @@
 import re
 
 def main():
-    correct_file_location = input("Please input the location of the correct file to open: ")
-    wrong_file_location = input("wrong file")
+    correct_filelocation = input("Please input the location of the correct file to open: ")
+    wrong_filelocation = input("wrong file")
     
 
     try:
-        with open(correct_file_location, "r") as fileOpen:
+        with open(correct_filelocation, "r") as correct_fileOpen:
             
             # existing code here ...
             # read the file
-            fileOpen = open(correct_file_location, "r")
+            correct_fileOpen = open(correct_filelocation, "r")
 
-            # list of file lines for reading attributes and methods
-            file_list = []
+            correct_file_list = []
 
             # the string which represents the types of relationships
             relationshipArrow = "lt"
@@ -79,9 +78,9 @@ def main():
             relationshipLocation = "<additional_attributes>"
             directionList = []
 
-            for line in fileOpen:
+            for line in correct_fileOpen:
 
-                file_list.append(line)
+                correct_file_list.append(line)
 
                 # counting the number of times the reationshipArrow string is seen per line in the file
                 count = 0
@@ -132,22 +131,22 @@ def main():
 
                 # appending attributes and methods to lists
             indexCount = 0
-            while indexCount < len(file_list):
-                if attributes in file_list[indexCount] and methods not in file_list[indexCount + 1]:
+            while indexCount < len(correct_file_list):
+                if attributes in correct_file_list[indexCount] and methods not in correct_file_list[indexCount + 1]:
                     attributesIndex = 1
                     attributeCount = 0
-                    while attributes not in file_list[(indexCount + attributesIndex)] and "</panel_attributes>" not in file_list[(indexCount + attributesIndex)]:
-                        attributesList.append(file_list[(indexCount + attributesIndex)])
-                        newAttributesList.append(file_list[(indexCount + attributesIndex)])
-                        attributeType.append(file_list[(indexCount + attributesIndex)])
+                    while attributes not in correct_file_list[(indexCount + attributesIndex)] and "</panel_attributes>" not in correct_file_list[(indexCount + attributesIndex)]:
+                        attributesList.append(correct_file_list[(indexCount + attributesIndex)])
+                        newAttributesList.append(correct_file_list[(indexCount + attributesIndex)])
+                        attributeType.append(correct_file_list[(indexCount + attributesIndex)])
                         attributesIndex += 1
                         attributeCount += 1
                     attributeCountList.append(attributeCount)
-                elif attributes in file_list[indexCount] and methods in file_list[indexCount + 1]:
+                elif attributes in correct_file_list[indexCount] and methods in correct_file_list[indexCount + 1]:
                     methodsIndex = 1
                     methodCount = 0
-                    while methods in file_list[indexCount + methodsIndex]:
-                        methodsList.append(file_list[(indexCount + methodsIndex)])
+                    while methods in correct_file_list[indexCount + methodsIndex]:
+                        methodsList.append(correct_file_list[(indexCount + methodsIndex)])
                         methodsIndex += 1
                         methodCount += 1
                     methodCountList.append(methodCount)
@@ -455,15 +454,28 @@ def main():
                 c1 += 1
                 c2 += 1
                 lengthValue += 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
             print("______________________________________Answer file reading")
     
-        with open(wrong_file_location, "r") as wrong_fileOpen:
+        with open(wrong_filelocation, "r") as wrong_fileOpen:
+            
+  # read the file
+            wrong_fileOpen = open(wrong_filelocation, "r")
 
-            # read the file
-            wrong_fileOpen = open(wrong_file_location, "r")
-
-            # list of file lines for reading attributes and methods
-            file_list2 = []
+            wrong_file_list = []
 
             # the string which represents the types of relationships
             relationshipArrow = "lt"
@@ -529,9 +541,9 @@ def main():
             relationshipLocation = "<additional_attributes>"
             directionList = []
 
-            for line in fileOpen:
+            for line in wrong_fileOpen:
 
-                file_list2.append(line)
+                wrong_file_list.append(line)
 
                 # counting the number of times the reationshipArrow string is seen per line in the file
                 count = 0
@@ -582,22 +594,22 @@ def main():
 
                 # appending attributes and methods to lists
             indexCount = 0
-            while indexCount < len(file_list2):
-                if attributes in file_list2[indexCount] and methods not in file_list2[indexCount + 1]:
+            while indexCount < len(wrong_file_list):
+                if attributes in wrong_file_list[indexCount] and methods not in wrong_file_list[indexCount + 1]:
                     attributesIndex = 1
                     attributeCount = 0
-                    while attributes not in file_list2[(indexCount + attributesIndex)] and "</panel_attributes>" not in file_list2[(indexCount + attributesIndex)]:
-                        attributesList.append(file_list2[(indexCount + attributesIndex)])
-                        newAttributesList.append(file_list2[(indexCount + attributesIndex)])
-                        attributeType.append(file_list2[(indexCount + attributesIndex)])
+                    while attributes not in wrong_file_list[(indexCount + attributesIndex)] and "</panel_attributes>" not in wrong_file_list[(indexCount + attributesIndex)]:
+                        attributesList.append(wrong_file_list[(indexCount + attributesIndex)])
+                        newAttributesList.append(wrong_file_list[(indexCount + attributesIndex)])
+                        attributeType.append(wrong_file_list[(indexCount + attributesIndex)])
                         attributesIndex += 1
                         attributeCount += 1
                     attributeCountList.append(attributeCount)
-                elif attributes in file_list2[indexCount] and methods in file_list2[indexCount + 1]:
+                elif attributes in wrong_file_list[indexCount] and methods in wrong_file_list[indexCount + 1]:
                     methodsIndex = 1
                     methodCount = 0
-                    while methods in file_list2[indexCount + methodsIndex]:
-                        methodsList.append(file_list[(indexCount + methodsIndex)])
+                    while methods in wrong_file_list[indexCount + methodsIndex]:
+                        methodsList.append(wrong_file_list[(indexCount + methodsIndex)])
                         methodsIndex += 1
                         methodCount += 1
                     methodCountList.append(methodCount)
@@ -905,12 +917,12 @@ def main():
                 c1 += 1
                 c2 += 1
                 lengthValue += 1
-            print("____________________________________________________user file reading")
 
 
 
     except FileNotFoundError:
         print("File not found. Please check the file location.")
+        
 
 if __name__ == "__main__":
     main()

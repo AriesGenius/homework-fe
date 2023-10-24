@@ -1,6 +1,4 @@
-
-
-sComponent(Staff,[staffID, firstName, surname, designation])
+ClassComponent(Staff,[staffID, firstName, surname, designation])
 ClassComponent(Property,[propertyNo, availableFrom, rentAmount])
 
 RelationshipComponent(Association, SourceClass, TargetClass, oversees >, [0..1, 0..*])
