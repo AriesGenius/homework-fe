@@ -7,3 +7,15 @@ AttributeComponent(day, date, +)
 AttributeComponent(time, date, -)
 AttributeComponent(startTime, DateTime, -)
 AttributeComponent(name, str, -)
+
+Database
+no visiablity
+no atturabute
+realtionship
+
+
+oop
+name,visiablity,attbutate
+realtionship 
+4 realtionship
+inhertance no multty and before that

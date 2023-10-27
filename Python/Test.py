@@ -1,38 +1,45 @@
-def compare_arrays_detailed(answer_array, user_answer_array):
-  """Compares two arrays and prints a detailed error message for each index where the user's answer is incorrect or missing, including the specific difference.
+# Initialize empty arrays for class and relationship data
+classArray = []
+relationshipArray = []
 
-  Args:
-    answer_array: A list of the correct answers.
-    user_answer_array: A list of the user's answers.
-    problem array: A list of problems that user answer input is different with answers
-  """
-  problem= []
-  for i in range(len(answer_array)):
-    if user_answer_array[i] is None:
-      print(f"Null answer at index {i}")
-    elif user_answer_array[i] != answer_array[i]:
-      print(f"Different answer at index {i}:")
-      print(f"Answer: {answer_array[i]}")
-      print(f"User answer: {user_answer_array[i]}")
-      print('\n'+"Differences:")
-      for j in range(len(answer_array[i])):
-        if answer_array[i][j] != user_answer_array[i][j]:
-          if j == 0:
-            print(f"- Name wrong but okay")
-            problem.append(user_answer_array[i][j]+' name is different but okay')
-          elif j == 1:
-            print(f"- Attribute wrong")
-            problem.append(user_answer_array[i][0]+' AttributeType is wrong')
-          elif j == 2:
-            print(f"- Attribute visibility wrong")
-            problem.append(user_answer_array[i][0]+' AtrributeVisibility is wrong')
-          else:
-            (f"- {answer_array[i][j]} != {user_answer_array[i][j]}")
-      for x in problem:
-        print(x)
+# Function to check if a line starts with "class" or "Relationship"
+def is_class_line(line):
+    return line.strip().startswith("class")
 
+def is_relationship_line(line):
+    return line.strip().startswith("Relationship")
+def check_attribute_format(attribute):
+    # Check if the first letter is capital and the last letter is lowercase
+    if attribute[0].isupper() and attribute[-1].islower():
+        return "Good format"
+    else:
+        return "Format problem"
+        print(attribute[0]+"first"+attribute[-1])
+def check_class_data_format(class_data):
+    for attribute in class_data:
+        result = check_attribute_format(attribute)
+        print(f"{attribute}: {result}")
 
+# Open the text file for reading
+with open('Classexample.txt', 'r') as file:
+    # Read the lines one by one
+    lines = file.readlines()
+    for line in lines:
+        if is_class_line(line):
+            # Extract class data from the line
+            class_data = line.strip()[16:-1].split(',')
+            classArray.append(class_data)
+        elif is_relationship_line(line):
+            # Extract relationship data from the line
+            relationship_data = line.strip()[20:-1].split(',')
+            relationshipArray.append(relationship_data)
 
-answer_array = ["staff", ["staffID", "string", "-"], ["firstname", "string", "-"]]
-user_answer_array = ["staff", ["staffID", "string", "-"], ["firstname", "", "-"]]
-compare_arrays_detailed(answer_array, user_answer_array)
+# Print the extracted data
+check_class_data_format(class_data)
+print("Class Data:")
+for class_data in classArray:
+    print(class_data)
+
+print("\nRelationship Data:")
+for relationship_data in relationshipArray:
+    print(relationship_data)

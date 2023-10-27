@@ -1,26 +1,42 @@
-import re
+# Initialize empty arrays for class and relationship data
+classArray = []
+relationshipArray = []
 
-def process_data(correct_filelocation,wrong_filelocation):
-    answer_array = []
-    user_answer_array = []
 
-    # Your data processing logic here...
+# Function to check if a line starts with "class" or "Relationship"
+def is_class_line(line):
+    return line.strip().startswith("class")
 
-    with open(correct_filelocation, "r") as correct_fileOpen:
-        
-                
+def is_relationship_line(line):
+    return line.strip().startswith("Relationship")
 
-        return answer_array
-    with open(wrong_filelocation, "r") as wrong_fileOpen:
-        return user_answer_array
+
     
 
-def main():
-    correct_filelocation = input("Please input the location of the correct file to open: ")
-    answer_array = process_data(correct_filelocation)
+        
+# Open the text file for reading
+with open('database.txt', 'r') as file:
+    # Read the lines one by one
+    lines = file.readlines()
+    for line in lines:
+        if is_class_line(line):
+            # Extract class data from the line and clean the attributes
+            class_data = [clean_attribute(attr) for attr in line.strip()[16:-1].split(',')]
+            classArray.append(class_data)
+        elif is_relationship_line(line):
+            # Extract relationship data from the line and clean the attributes
+            relationship_data = [clean_attribute(attr) for attr in line.strip()[20:-1].split(',')]
+            relationshipArray.append(relationship_data)
 
-    for item in answer_array:
-        print(item)
+# Print the cleaned data
+check_class_data_format(class_data)
+check_relationship_format(relationship_data)
+"""
+print("Class Data:")
+for class_data in classArray:
+    print(class_data)
 
-if __name__ == "__main__":
-    main()
+print("\nRelationship Data:")
+for relationship_data in relationshipArray:
+    print(relationship_data)
+"""
