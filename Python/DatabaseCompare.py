@@ -1,6 +1,6 @@
 import re
 
-class_example_file = "database.txt"
+class_example_file = "Classexample.txt"
 
 attribute_array = []
 realtion_array = []
@@ -171,23 +171,28 @@ check_relationship_format(realtion_name_array)
 
 
 print('_________________________________')
+
 # Count the total number of problems and good things in the array
 count_problem = len(problem)
 count_good = len(good)
 total_count = count_problem + count_good
 
-# Calculate the percentage of problems and good things in the array
-percent_problem = count_problem / total_count * 100
-percent_good = count_good / total_count * 100
+# If there are no problems, print a message saying that the design is perfect
+if count_problem == 0:
+    print('your design is prefect')
 
+# Otherwise, calculate the percentage of problems and good things in the array
+else:
+    percent_problem = count_problem / total_count * 100
+    percent_good = count_good / total_count * 100
 
-
-
-# Print the total count and percentage of problems and good things in the array
 print("Total count of problems:", count_problem)
 print("Total count of good things:", count_good)
+
+# Print the percentage of problems and good things in the array
 print("Percentage of problems:", percent_problem)
 print("Percentage of good things:", percent_good)
+
 
 print('------------------------------')
 print('First time and second time feedback ')
