@@ -387,9 +387,17 @@ for method in methodsList:
     elif "#" in method:
         methodVis.append("#")
 
-#for directions in splitDirectionList:
-#    for values in directions:
-        
+methodVoid1 = []
+methodVoid2 = []
+for method in methodsList:
+    void1 = method.split('(')[1]
+    void1 = void1.split(')')[0]
+    methodVoid1.append(void1)
+    void2 = method.split(')')[1]
+    methodVoid2.append(void2)
+
+for idx, ele in enumerate(methodVoid2):
+    methodVoid2[idx] = ele.replace(twoDots, '')
 
 # printing everything
 print("The relationships are", relationships)
@@ -421,6 +429,9 @@ print("the attribute types are:", attributeTypes)
 
 print("the labels are:", labels)
 print("relationship labels level:", relationLevel)
+
+print(methodVoid1)
+print(methodVoid2)
 
 f = open("classFormat.txt", "w")
 
@@ -464,6 +475,7 @@ indCount = 0
 multiplicityCount = 0
 labelCount = 0
 relationshipNum = 0
+classNumber = 0
 for r in relationships:
     relationshipNum += 1
     rNumStr = str(relationshipNum)
@@ -473,16 +485,15 @@ for r in relationships:
     f.write("RelationshipComponent(")
     f.write(r)
     f.write(", ")
-    f.write("SourceClass")
+    f.write(newClasses[classNumber])
     f.write(", ")
-    f.write("TargetClass")
+    f.write(newClasses[(classNumber + 1)])
     f.write(", ")
     if relationships.index(r) in relationLevel:
         f.write(labels[labelCount])
         labelCount += 1
     else:
         f.write(" ")
-    #f.write("label")
     f.write(", [")
     f.write(m1[multiplicityCount])
     f.write(", ")
@@ -491,6 +502,7 @@ for r in relationships:
     f.write("\n")
     multiplicityCount += 1
     indCount += 1
+    classNumber += 1
 
 f.write("\n")
 
@@ -536,10 +548,17 @@ if umlChoice == '1':
         f.write(" = ")
         f.write("MethodComponent(")
         f.write(m)
+        f.write("()")
         f.write(", ")
-        f.write("void")
+        if len(methodVoid1) > mLengthV and len(methodVoid1[mV]) > 0:
+            f.write(methodVoid1[mV])
+        else:
+            f.write("void")
         f.write(", ")
-        f.write("void")
+        if len(methodVoid2) > mLengthV and len(methodVoid2[mV]) > 0:
+            f.write(methodVoid2[mV])
+        else:
+            f.write("void")
         f.write(", ")
         if len(methodVis) > mLengthV:
             f.write(methodVis[mV])
