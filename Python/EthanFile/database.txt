@@ -1,0 +1,4 @@
+class1 = ClassComponet('courseNo','course Tilitle')
+class2 = ClassComponet('Studentid','FirstName','aastname')
+relationship1 = RelationshipComponet(Association,class1,class2,'enrols>',[2..5,0..440])
+relationship2 = RelationshipComponet(Inheritance,class2,class1)
