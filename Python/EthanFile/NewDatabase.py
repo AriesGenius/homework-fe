@@ -20,7 +20,11 @@ with open(class_example_file, "r") as file:
         count_AC =0
         count_AC_good=0
         problem_AC=[]
-        
+
+        count_MC=0
+        count_MC_good=0
+        problem_MC=[]
+
         for line in file:
         #Check Class Componet
             if 'ClassComponent' in line:
@@ -200,38 +204,48 @@ with open(class_example_file, "r") as file:
                 array_elements_MC = [elem.strip() for elem in content_inside_brackets.split(',')]
                 
                 Clean_list = [re.sub(r'\[|\] ', ' ', item) for item in array_elements_MC]
-                
+                count_MC +=1
                 #check for ()
                 if re.search(r"\(\)", array_elements_MC[0]):
                     print(f"() found {array_elements_MC[0]}")
+                    count_MC_good+=1
                 else:
                     print(f" please check {array_name_MC} method")
+                    problem_AC.append(f"{array_name_MC} Check method name")
                 #check input file
                 array_elements_MC[1] = array_elements_MC[1].strip()
-             
               
                 if array_elements_MC[1] =='void' or array_elements_MC[1]== 'Void':
                     print('Good content void')
+                    count_MC_good+=1
                 elif ':' in array_elements_MC[1]:
                     content_after_colon = array_elements_MC[1].split(':')[1].strip()
-                    if content_after_colon =='str'or content_after_colon=='int' or content_after_colon== 'date'or content_after_colon== 'DateTime'or content_after_colon== 'bool':
+                    if content_after_colon =='str'or content_after_colon=='int' or content_after_colon== 'date' or content_after_colon== 'DateTime'or content_after_colon== 'bool':
                         print('Good input class name')
+                        count_MC_good+=1
+                    else:
+                        problem_MC.append(f"{array_name_MC} Check intput class name")
                 else:
-                    print(f"{array_name_MC} Check input")
+                    print(f"{array_name_MC} Check input attribute")
+                    problem_MC.append(f"{array_name_MC} Check intput class name")
                 # check output  file
                 array_elements_MC[2] = array_elements_MC[2].strip()
       
                 if array_elements_MC[2]=='str' or array_elements_MC[2]=='bool'or array_elements_MC[2]=='DateTime':
                     print('Good output')
+                    count_MC_good+=1
                 else:
-                    print(f"{array_name_MC} Check output")
+                    print(f"{array_name_MC} Check output attribute")
+                    problem_MC.append(f"{array_name_MC} Check output class name")
 
                 #check public or private
                 array_elements_MC[3] = array_elements_MC[3].strip()
                 if array_elements_MC[3] == "+" or array_elements_MC[3] == "-" or array_elements_MC[3] =="#":
                     print('Good visibility')
+                    count_MC_good+=1
                 else:
                     print(f"{array_name_MC} Check visibility")
+                    problem_MC.append(f"{array_name_MC} have undefined visibility marker")
             
 print(count_CC)
 print(count_CC_good)
