@@ -1,0 +1,5 @@
+class1 = ClassComponent(ikarim,[time, day])
+class2 = ClassComponent(Calendar,[time])
+
+relationship1 = RelationshipComponent(Composition, ikarim, Calendar, has >, [0..*, 3..8])
+

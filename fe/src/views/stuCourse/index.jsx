@@ -66,7 +66,7 @@ export default function Index() {
               name="file"
               action="/api/user/submit_homework"
               fileList={fileList}
-              accept={".jpg, .jpeg, .png,.uxl"}
+              accept={".jpg, .jpeg, .png,.uxf"}
               onChange={(info) => {
                 if (info.file.status !== "uploading") {
                   console.log(info.file, info.fileList);
@@ -92,7 +92,7 @@ export default function Index() {
                   file.type !== "image/png" &&
                   file.type !== "image/jpeg" &&
                   file.type !== "image/jpg" &&
-                  !file.name.includes(".uxl")
+                  !file.name.includes(".uxf")
                 ) {
                   message.error(`${file.name} must is png,jpg,uxl file`);
                   return false;
@@ -116,9 +116,9 @@ export default function Index() {
             </Upload>
             &nbsp; &nbsp;
             {row.submit && (
-              <Button type="link" href={row.homework_content} target="_blank">
-                Faceback
-              </Button>
+              <a type="link" href={row.homework_source} target="_blank">
+                Feedback
+              </a>
             )}
           </>
         );

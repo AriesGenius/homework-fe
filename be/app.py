@@ -287,13 +287,13 @@ def submit_homework():
             return jsonify(response_data), 500
 
         # 保存文件
-        path = r'D:\project\homework-fe-main\be'
+        path = r'D:\project\homework-fe\be'
         file.save(os.path.join(path, file.filename))
 
         outfile = getgrade(os.path.join(path, file.filename))
 
         # 创建新作业
-        homework = Homework(homework_content=r'D:\project\homework-fe-main\be' + file.filename, homework_name=homework_name,
+        homework = Homework(homework_content=r'D:\project\homework-fe\be' + file.filename, homework_name=homework_name,
                             homework_course=homework_course, homework_time=homework_time,
                             homework_user=homework_user, homework_score=outfile)
 
@@ -376,6 +376,8 @@ def query_course_by_teacher():
 # 通过课程名称查询所有作业,course_homework这张表
 @app.route('/user/query_homework_by_course', methods=['POST'])
 def query_homework_by_course():
+    host_with_port = request.host
+    print(host_with_port)
     try:
         # 从POST请求中获取JSON数据
         request_data = request.get_json()
@@ -416,6 +418,8 @@ def query_homework_by_course():
                     course_dict["submit"] = False
                 else:
                     course_dict["submit"] = True
+                    # 如果学生提交了，则返回作业source
+                    course_dict["homework_source"] =f'http://{host_with_port}/{homeworks[5]}'
                 courses_list.append(course_dict)
 
         # 返回成功的JSON响应
@@ -435,6 +439,7 @@ def query_homework_by_course():
             "data": {}
         }
         return jsonify(response_data), 200
+
 
 
 
@@ -1010,7 +1015,7 @@ def getgrade(upfile):
             mLengthV += 1
     # 后半部分处理
     print("_________________________________")
-    class_example_file = r"D:\project\homework-fe-main\be\database.txt"
+    class_example_file = r"D:\project\homework-fe\be\database.txt"
 
     attribute_array = []
     realtion_array = []
