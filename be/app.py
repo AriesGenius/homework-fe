@@ -377,7 +377,6 @@ def query_course_by_teacher():
 @app.route('/user/query_homework_by_course', methods=['POST'])
 def query_homework_by_course():
     host_with_port = request.host
-    print(host_with_port)
     try:
         # 从POST请求中获取JSON数据
         request_data = request.get_json()

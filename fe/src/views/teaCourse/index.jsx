@@ -1,3 +1,4 @@
+ // Importing UI components from 'antd'
 import {
   Button,
   Divider,
@@ -9,25 +10,25 @@ import {
   Table,
   Modal,
 } from "antd";
-import React, { useEffect, useState } from "react";
-import { apiGetTeaCourse, apiNewWork } from "../../utils/api";
+import React, { useEffect, useState } from "react";// Importing React and hooks
+import { apiGetTeaCourse, apiNewWork } from "../../utils/api";// Importing API utility functions
 
 export default function Index() {
+  // Retrieving user data from local storage
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-
+  // State to manage the list of courses
   const [list, setList] = useState([]);
-
+    // State to manage work modal (open/closed status and row data)
   const [workState, setWorkState] = useState({
     open: false,
     row: {},
 
-    onCreate: (data) => {
-      apiNewWork({
+    onCreate: (data) => {  // Function called when a new work is created
+      apiNewWork({// API call to create new work
         course_name: data.course_name,
         course_homework: data.course_homework,
       }).then((res) => {
         message.success("Add Success");
-
         const old = { ...workState };
         setWorkState({ ...old, open: false, row: {} });
       });
@@ -38,6 +39,7 @@ export default function Index() {
     },
   });
 
+  // Column definitions for the table
   const columns = [
     {
       title: "No.",
@@ -78,7 +80,7 @@ export default function Index() {
   ];
 
   const [form] = Form.useForm();
-
+  // Function to fetch and set the list of courses
   const getList = () => {
     apiGetTeaCourse({
       course_teacher: user.username,
@@ -86,7 +88,7 @@ export default function Index() {
       setList(res.data?.courses || []);
     });
   };
-
+  // useEffect hook to fetch course list on component mount
   useEffect(() => {
     getList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -94,53 +96,6 @@ export default function Index() {
 
   return (
     <>
-      {/* <Button type="primary">Add Course</Button> */}
-      {/* <Divider /> */}
-      {/* 
-      <br />
-      <Form layout="inline" form={form}>
-        <Form.Item label="Course" name="course">
-          <Input placeholder="Course Name" />
-        </Form.Item>
-        <Form.Item label="submission status" name="submission_status">
-          <Select style={{ width: "180px" }} placeholder="Submission Status">
-            {stateMap.map((item) => (
-              <Select.Option value={item.value} key={item.value}>
-                {item.label}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item>
-          <Button
-            type="primary"
-            onClick={() => {
-              const val = form.getFieldsValue();
-              const oldData = dataSource.filter(
-                (it) =>
-                  it.course.includes(val.course) ||
-                  it.submission_status == val.submission_status
-              );
-              setList(oldData);
-            }}
-          >
-            Query
-          </Button>
-          &nbsp; &nbsp;
-          <Button
-            onClick={() => {
-              form.resetFields();
-              setList(dataSource);
-            }}
-          >
-            Reset
-          </Button>
-        </Form.Item>
-      </Form>
-      <br />
-      <br /> 
-      */}
-
       <Table rowKey="id" dataSource={list} columns={columns} />
 
       <AddWorkModal {...workState} />
@@ -149,18 +104,20 @@ export default function Index() {
 }
 
 // eslint-disable-next-line react/prop-types
+// AddWorkModal component for adding new course works
 const AddWorkModal = ({ open, onCreate, onCancel, row }) => {
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
-
+  const [loading, setLoading] = useState(false);// State for loading indicator
+  
+  // Function to handle modal 'OK' action
   const handleOk = () => {
-    setLoading(true);
+    setLoading(true);// Start loading
     form
-      .validateFields()
+      .validateFields()// Validate form fields
       .then((values) => {
-        onCreate({ ...values, ...row });
-        setLoading(false);
-        form.resetFields();
+        onCreate({ ...values, ...row });// Call onCreate with form values and row data
+        setLoading(false);// Stop loading
+        form.resetFields();// Reset form fields
       })
       .catch(() => {
         setLoading(false);

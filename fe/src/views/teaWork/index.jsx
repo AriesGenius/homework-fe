@@ -1,3 +1,4 @@
+// Importing components from Ant Design and React hooks
 import {
   Button,
   Divider,
@@ -14,10 +15,11 @@ import { apiGetWork, apiDelWork } from "../../utils/api";
 import { useSearchParams } from "react-router-dom";
 
 export default function Index() {
+  // Retrieving user data from local storage
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-
+  // Hook to access search parameters from URL
   const [search] = useSearchParams();
-
+  // State to store the list of course works
   const [list, setList] = useState([]);
 
   const columns = [
@@ -60,7 +62,7 @@ export default function Index() {
   ];
 
   const [form] = Form.useForm();
-
+  // Function to fetch the list of course works
   const getList = () => {
     apiGetWork({
       course_name: search.get("course_name"),
