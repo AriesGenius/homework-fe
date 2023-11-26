@@ -27,6 +27,7 @@ with open(class_example_file, "r") as file:
 
         for line in file:
         #Check Class Componet
+
             if 'ClassComponent' in line:
                 
                 # Extracting information within brackets
@@ -56,9 +57,7 @@ with open(class_example_file, "r") as file:
                         problem_CC.append(f"{array_name_CC} {x} wrong or null")
 
                         Clean_list_CC.append(x)
-
-                print('_________________________________')         
-          #Check Relationship Components     
+  
             elif 'RelationshipComponent' in line:
 
                 # Extracting information within brackets
@@ -129,10 +128,13 @@ with open(class_example_file, "r") as file:
                                 print(f"Clean_list[4] contains only numbers, *, and .")
                             else:
                                 print(f"Clean_list[4] contains other characters")
+                                problem_RC.append(f"{Clean_list[4]} contains other characters")
                             if all(c.isdigit() or c in "* ." for c in Clean_list[5]):
                                 print(f"Clean_list[5] contains only numbers, *, and .")
                             else:
                                 print(f"Clean_list[5] contains other characters")
+                                problem_RC.append(f"{Clean_list[4]} contains other characters")
+                                
                             
                         
                         else:
@@ -144,123 +146,40 @@ with open(class_example_file, "r") as file:
                 else:
                     print('undefined connection')
                     problem_RC.append(f"{array_name_RC} have undefined Relationshiptype")
-            #Check AttributeComponets
-            elif 'AttributeComponent' in line:
-                # Extracting information within brackets
-                start_bracket = line.find('(')
-                end_bracket = line.find(')')
-                content_inside_brackets = line[start_bracket + 1 : end_bracket]
-                # Splitting the string by spaces to get individual words
-                words = line.split()
-                # Splitting the content inside brackets into an array
-                array_name_AC = words[0]
-                array_elements_AC = [elem.strip() for elem in content_inside_brackets.split(',')]
-                
-                
-                Clean_list_CC = [elem.strip() for elem in Clean_list_CC]
-                count_AC+=1
-                #check attribute name existed in class
-                if array_elements_AC[0] is not None:
-                    if array_elements_AC[0]  in Clean_list_CC:
-                        print('good')
-                        print(f"{array_elements_AC[0]}")
-                        count_AC_good+=1
-                        
-                    else:
-                        print('not good')
-                        print(f"{array_elements_AC[0]}")
-                        problem_AC.append(f"{array_name_AC} Attribute name are not exsiting in class name")
-                else:
-                    print(f"{array_elements_AC[0] } are empty")
-                    problem_AC.append(f"{array_name_AC} missing Attribute name")
-                #check properits
-                properits=['date','int','str','bool']
-                if array_elements_AC[1]  in properits:
-                    print('properits existd')
-                    count_AC_good+=1
-                else:
-                    print('properites not existed')
-                    problem_AC.append(f"in { array_name_AC} AttributeType wrong")
-                    
-                #check public or private
-                if array_elements_AC[2] == "+" or array_elements_AC[2] == "-"or array_elements_AC[2] == "#":
-                    print('Good symbol')
-                    count_AC_good+=1
-                    
-                else:
-                    print('bad symbol')
-                    problem_AC.append(f"{array_name_AC} have undefined visibility marker")
-            #Check MethodComonent
-            elif 'MethodComponent' in line:
-           
-                # Extracting information within brackets
-                start_bracket = line.find('(')
-                end_bracket = line.rfind(')')
-                content_inside_brackets = line[start_bracket + 1 : end_bracket]
-                # Splitting the string by spaces to get individual words
-                words = line.split()
-                # Splitting the content inside brackets into an array
-                array_name_MC = words[0]
-                array_elements_MC = [elem.strip() for elem in content_inside_brackets.split(',')]
-                
-                Clean_list = [re.sub(r'\[|\] ', ' ', item) for item in array_elements_MC]
-                count_MC +=1
-                #check for ()
-                if re.search(r"\(\)", array_elements_MC[0]):
-                    print(f"() found {array_elements_MC[0]}")
-                    count_MC_good+=1
-                else:
-                    print(f" please check {array_name_MC} method")
-                    problem_AC.append(f"{array_name_MC} Check method name")
-                #check input file
-                array_elements_MC[1] = array_elements_MC[1].strip()
-              
-                if array_elements_MC[1] =='void' or array_elements_MC[1]== 'Void':
-                    print('Good content void')
-                    count_MC_good+=1
-                elif ':' in array_elements_MC[1]:
-                    content_after_colon = array_elements_MC[1].split(':')[1].strip()
-                    if content_after_colon =='str'or content_after_colon=='int' or content_after_colon== 'date' or content_after_colon== 'DateTime'or content_after_colon== 'bool':
-                        print('Good input class name')
-                        count_MC_good+=1
-                    else:
-                        problem_MC.append(f"{array_name_MC} Check intput class name")
-                else:
-                    print(f"{array_name_MC} Check input attribute")
-                    problem_MC.append(f"{array_name_MC} Check intput class name")
-                # check output  file
-                array_elements_MC[2] = array_elements_MC[2].strip()
-      
-                if array_elements_MC[2]=='str' or array_elements_MC[2]=='bool'or array_elements_MC[2]=='DateTime':
-                    print('Good output')
-                    count_MC_good+=1
-                else:
-                    print(f"{array_name_MC} Check output attribute")
-                    problem_MC.append(f"{array_name_MC} Check output class name")
 
-                #check public or private
-                array_elements_MC[3] = array_elements_MC[3].strip()
-                if array_elements_MC[3] == "+" or array_elements_MC[3] == "-" or array_elements_MC[3] =="#":
-                    print('Good visibility')
-                    count_MC_good+=1
-                else:
-                    print(f"{array_name_MC} Check visibility")
-                    problem_MC.append(f"{array_name_MC} have undefined visibility marker")
-            
+print('-----------------')
 print(count_CC)
 print(count_CC_good)
 print(problem_CC)
+Total_CC= count_CC_good+len(problem_CC)
+print(Total_CC)
+precentage_CC= count_CC_good/Total_CC*100
+print(precentage_CC)
+
 print('-----------------')
 print(count_RC)
 print(count_RC_good)
 print(problem_RC)
-print('-----------------')
-print(count_AC)
-print(count_AC_good)
-print(problem_AC)
-print('-----------------')
-print(count_MC)
-print(count_MC_good)
-print(problem_MC)
+Total_RC= count_RC_good+len(problem_RC)
+print(Total_RC)
+precentage_RC= count_RC_good/Total_RC*100
+print(precentage_RC)
+for item in problem_RC:
+    print (item)
+    if str(item) == "does not contain any of the symbols '<>v^'":
+        print('good symbol')
+    '''
+    if str(item) == 'Not exsiting class name':
+        print('Please check Realtionship target or source class ')
+    elif str(item) == 'Wrong length for inhertance':
+        print('Please check Your inhertance Realtionship compents')
+    elif str(item) =='does not contain any of the symbols':
+        print('Please check your label')
+    elif str(item) =='is null':
+        print('your label is empty')
+    elif str(item) == 'undefined realtionshiptype':
+        print('Please check your relationshiptype')
+'''
+
 
 

@@ -5,7 +5,7 @@ class4 = ClassComponent(Contact,[name])
 
 relationship1 = RelationshipComponent(Aggregation, ikarim, Calendar, < has, [0..*, 0..*])
 relationship2 = RelationshipComponent(Dependency, Calendar, Meeting,  , [0..*, 0..*])
-relationship3 = RelationshipComponent(Composition, Meeeting, Conttact, has >, [0..*, 3..8])
+relationship3 = RelationshipComponent(vomposition, Meeeting, Conttact, has >, [0..*, 3..8])
 relationship4 = RelationshipComponent(Inhertance,contact,ikarim)
 
 attribute1 = AttributeComponent(time, date, -)
