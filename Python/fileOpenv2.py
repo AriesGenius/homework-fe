@@ -1,5 +1,8 @@
 import re
 
+# is the diagram for programming or database courses?
+umlChoice = input('Please input 1 for programming or 2 for database courses: ')
+
 # file must first be converted to a text file.
 file = input("Please input the location of the file to open: ")
 
@@ -66,6 +69,7 @@ attributeType = []
 # methods
 methods = "("
 methodsList = []
+newMethodsList = []
 
 labels = []
 
@@ -142,6 +146,7 @@ while indexCount < len(file_list):
         methodCount = 0
         while methods in file_list[indexCount + methodsIndex]:
             methodsList.append(file_list[(indexCount + methodsIndex)])
+            newMethodsList.append(file_list[(indexCount + methodsIndex)])
             methodsIndex += 1
             methodCount += 1
         methodCountList.append(methodCount)
@@ -190,6 +195,7 @@ additionalAttributes1 = "    <additional_attributes>"
 additionalAttributes2 = "</additional_attributes>"
 minus = "-"
 plus = "+"
+hashtag = "#"
 date = "date"
 dateTime = "DateTime"
 string = "str"
@@ -197,6 +203,8 @@ bool = "bool"
 twoDots = ":"
 leftArrow = "&lt;"
 rightArrow = "&gt;"
+bracket1 = "("
+bracket2 = ")"
 
 # for loops using replace statements to remove the
 # previously stated characters.
@@ -283,6 +291,30 @@ for idx, ele in enumerate(methodsList):
 for idx, ele in enumerate(methodsList):
     methodsList[idx] = ele.replace(letter2, '')
 
+for idx, ele in enumerate(newMethodsList):
+    newMethodsList[idx] = ele.split(bracket1, 1)[0]
+    print(idx)
+for idx, ele in enumerate(newMethodsList):
+    newMethodsList[idx] = ele.replace(panelAttributes, '')
+for idx, ele in enumerate(newMethodsList):
+    newMethodsList[idx] = ele.replace(letter2, '')
+for idx, ele in enumerate(newMethodsList):
+    newMethodsList[idx] = ele.replace(twoDots, '')
+for idx, ele in enumerate(newMethodsList):
+    newMethodsList[idx] = ele.replace(bracket1, '')
+for idx, ele in enumerate(newMethodsList):
+    newMethodsList[idx] = ele.replace(bracket2, '')
+for idx, ele in enumerate(newMethodsList):
+    newMethodsList[idx] = ele.replace(plus, '')
+for idx, ele in enumerate(newMethodsList):
+    newMethodsList[idx] = ele.replace(minus, '')
+for idx, ele in enumerate(newMethodsList):
+    newMethodsList[idx] = ele.replace(hashtag, '')
+for idx, ele in enumerate(newMethodsList):
+    newMethodsList[idx] = ele.replace(bool, '')
+for idx, ele in enumerate(newMethodsList):
+    newMethodsList[idx] = ele.replace(string, '')
+
 for idx, ele in enumerate(directionList):
     directionList[idx] = ele.replace(additionalAttributes1, '')
 for idx, ele in enumerate(directionList):
@@ -306,6 +338,8 @@ for idx, ele in enumerate(newAttributesList):
     newAttributesList[idx] = ele.replace(twoDots, '')
 for idx, ele in enumerate(newAttributesList):
     newAttributesList[idx] = ele.replace(letter2, '')
+for idx, ele in enumerate(newAttributesList):
+    newAttributesList[idx] = ele.replace(hashtag, '')
 
 attributeVis = []
 
@@ -339,6 +373,32 @@ for idx, ele in enumerate(labels):
 for idx, ele in enumerate(labels):
     labels[idx] = ele.replace(rightArrow, '>')
 
+splitDirectionList = []
+for locate in directionList:
+    splitDirection = locate.split(';')
+    splitDirectionList.append(splitDirection)
+
+methodVis = []
+for method in methodsList:
+    if "+" in method:
+        methodVis.append("+")
+    elif "-" in method:
+        methodVis.append("-")
+    elif "#" in method:
+        methodVis.append("#")
+
+methodVoid1 = []
+methodVoid2 = []
+for method in methodsList:
+    void1 = method.split('(')[1]
+    void1 = void1.split(')')[0]
+    methodVoid1.append(void1)
+    void2 = method.split(')')[1]
+    methodVoid2.append(void2)
+
+for idx, ele in enumerate(methodVoid2):
+    methodVoid2[idx] = ele.replace(twoDots, '')
+
 # printing everything
 print("The relationships are", relationships)
 
@@ -346,6 +406,9 @@ print("The x coordinates are:", xCoordinate)
 print("The y coordinates are:", yCoordinate)
 print("The w coordinates are:", wCoordinate)
 print("The h coordinates are:", hCoordinate)
+
+print(directionList)
+print(splitDirectionList)
 
 print("The classes are:", newClasses)
 
@@ -355,25 +418,34 @@ print("The m2's are:", m2)
 print("The attributes are:", attributesList)
 print("The attributes are:", newAttributesList)
 print("The methods are:", methodsList)
-
-print(directionList)
+print("The methods are:", newMethodsList)
 
 print("attribute count list:", attributeCountList)
 print("method count list:", methodCountList)
 
 print("the attribute visibilities are:", attributeVis)
+print("the method visibilities are:", methodVis)
 print("the attribute types are:", attributeTypes)
 
 print("the labels are:", labels)
 print("relationship labels level:", relationLevel)
+
+print(methodVoid1)
+print(methodVoid2)
 
 f = open("classFormat.txt", "w")
 
 writeCount = 0
 c = 0
 classIndex = 0
+classCount = 0
 attributesTotal = 0
 for x in newClasses:
+    classCount += 1
+    classCountStr = str(classCount)
+    f.write('class')
+    f.write(classCountStr)
+    f.write(' = ')
     f.write("ClassComponent(")
     f.write(x)
     f.write(",[")
@@ -402,20 +474,26 @@ f.write("\n")
 indCount = 0
 multiplicityCount = 0
 labelCount = 0
+relationshipNum = 0
+classNumber = 0
 for r in relationships:
+    relationshipNum += 1
+    rNumStr = str(relationshipNum)
+    f.write('relationship')
+    f.write(rNumStr)
+    f.write(' = ')
     f.write("RelationshipComponent(")
     f.write(r)
     f.write(", ")
-    f.write("SourceClass")
+    f.write(newClasses[classNumber])
     f.write(", ")
-    f.write("TargetClass")
+    f.write(newClasses[(classNumber + 1)])
     f.write(", ")
     if relationships.index(r) in relationLevel:
         f.write(labels[labelCount])
         labelCount += 1
     else:
-        f.write("no label")
-    #f.write("label")
+        f.write(" ")
     f.write(", [")
     f.write(m1[multiplicityCount])
     f.write(", ")
@@ -424,29 +502,69 @@ for r in relationships:
     f.write("\n")
     multiplicityCount += 1
     indCount += 1
+    classNumber += 1
 
 f.write("\n")
 
-c1 = 0
-c2 = 0
-lengthValue = 0
+if umlChoice == '1':
+    c1 = 0
+    c2 = 0
+    mV = 0
+    mLengthV = 0
+    lengthValue = 0
+    attributeNum = 0
+    methodNum = 0
+    for a in newAttributesList:
+        attributeNum += 1
+        aNumStr = str(attributeNum)
+        f.write('attribute')
+        f.write(aNumStr)
+        f.write(' = ')
+        f.write("AttributeComponent(")
+        f.write(a)
+        f.write(", ")
+        if len(attributeTypes) > lengthValue:
+            f.write(attributeTypes[c2])
+        else:
+            f.write(" ")
+        f.write(", ")
+        if len(attributeVis) > lengthValue:
+            f.write(attributeVis[c1])
+        else:
+            f.write(" ")
+        f.write(")")
+        f.write("\n")
+        c1 += 1
+        c2 += 1
+        lengthValue += 1
 
-for a in newAttributesList:
-    f.write("AttributeComponent(")
-    f.write(a)
-    f.write(", ")
-    if len(attributeTypes) > lengthValue:
-        f.write(attributeTypes[c2])
-    else:
-        f.write("noAttributeType")
-    f.write(", ")
-    if len(attributeVis) > lengthValue:
-        f.write(attributeVis[c1])
-    else:
-        f.write("noAttributeVis")
-    f.write(")")
     f.write("\n")
-    c1 += 1
-    c2 += 1
-    lengthValue += 1
-print(" -------------------------------------------- ")
+
+    for m in newMethodsList:
+        methodNum += 1
+        mNumStr = str(methodNum)
+        f.write("method")
+        f.write(mNumStr)
+        f.write(" = ")
+        f.write("MethodComponent(")
+        f.write(m)
+        f.write("()")
+        f.write(", ")
+        if len(methodVoid1) > mLengthV and len(methodVoid1[mV]) > 0:
+            f.write(methodVoid1[mV])
+        else:
+            f.write("void")
+        f.write(", ")
+        if len(methodVoid2) > mLengthV and len(methodVoid2[mV]) > 0:
+            f.write(methodVoid2[mV])
+        else:
+            f.write("void")
+        f.write(", ")
+        if len(methodVis) > mLengthV:
+            f.write(methodVis[mV])
+        else:
+            f.write(" ")
+        f.write(")")
+        f.write("\n")
+        mV += 1
+        mLengthV += 1

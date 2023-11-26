@@ -101,7 +101,7 @@ export default function Index() {
                     },
                   ]}
                 >
-                  <Input type="text" placeholder="Password" />
+                  <Input.Password type="text" placeholder="Password" />
                 </Form.Item>
 
                 <br />
@@ -174,7 +174,7 @@ export default function Index() {
                     },
                   ]}
                 >
-                  <Input type="text" placeholder="Password" />
+                  <Input.Password type="text" placeholder="Password" />
                 </Form.Item>
 
                 <Form.Item>

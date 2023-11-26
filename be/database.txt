@@ -1,0 +1,3 @@
+class1 = ClassComponet('courseNo','Course Tilitle')
+class2 = ClassComponet('Studentid','firstName','sastname')
+relationship1 = RelationshipComponet(Association,class1,class2,'enrols>',[2..5,0..440])

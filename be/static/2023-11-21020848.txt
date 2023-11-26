@@ -1,0 +1,14 @@
+Total count of problems:3
+Total count of good things:4
+Percentage of problems:42.857142857142854
+Percentage of good things:57.14285714285714
+------------------------------
+First time and second time feedback
+You did good job,but there are something you can improve with
+Please check Relationship 
+Please check your attribute name.
+Please check your label.
+-----------------------------------
+Third Time feedback
+Good effort, keep it up, but there are some problems in this array:
+['check format courseNo', 'check format firstName', 'check format sastname']
