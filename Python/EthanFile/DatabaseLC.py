@@ -1,6 +1,6 @@
 import re
 
-class_example_file = "Classexample.txt"
+class_example_file = "database.txt"
 
 attribute_array = []
 realtion_array = []
@@ -169,57 +169,92 @@ for x in attribute_array:
 
 check_relationship_format(realtion_name_array)
 
-
+checkdata(Att_array)
 print('_________________________________')
-
 # Count the total number of problems and good things in the array
 count_problem = len(problem)
 count_good = len(good)
 total_count = count_problem + count_good
 
-# If there are no problems, print a message saying that the design is perfect
-if count_problem == 0:
-    print('your design is prefect')
+# Calculate the percentage of problems and good things in the array
+percent_problem = count_problem / total_count * 100
+percent_good = count_good / total_count * 100
 
-# Otherwise, calculate the percentage of problems and good things in the array
-else:
-    percent_problem = count_problem / total_count * 100
-    percent_good = count_good / total_count * 100
 
+
+
+# Print the total count and percentage of problems and good things in the array
 print("Total count of problems:", count_problem)
 print("Total count of good things:", count_good)
-
-# Print the percentage of problems and good things in the array
 print("Percentage of problems:", percent_problem)
 print("Percentage of good things:", percent_good)
-
 
 print('------------------------------')
 print('First time and second time feedback ')
 
 # Check each index of the problem array and print the appropriate message.
-if percent_good > percent_problem:
-    print('You did good job,but there are something you can improve with')
-elif percent_good < percent_problem:
-    print("Keep it up, don't give up")
-for index, problems in enumerate(problem):
-    if index == 0:
-        print("Please check Relationship ")
-    elif index == 1:
-        print("Please check your attribute name.")
-    elif index == 2:
-        print("Please check your label.")
-    elif index == 3:
-        print("Class name is not included in existing classes,please check")
+import os
 
-print('-----------------------------------')
-print('Third Time feedback')
-# If the percentage of good things is more than the percentage of problems, print a message encouraging the user to keep up the good work, but also print the problem array
-if percent_good > percent_problem:
-  print("Good effort, keep it up, but there are some problems in this array:")
-  print(problem)
-else:
-  print("There are more problems than good things in this array:")
-  print(problem)
+# First attempt feedback
+with open('attempt1.txt', 'w') as f:
+    f.write('First Attempt Feedback:')
+    f.write('\n')
+    f.write('-----------------------------------')
+    if percent_good > percent_problem:
+        f.write('You did a good job, but there is something you can improve on:')
+        f.write('\n')
+        f.write(str(problem))
+    elif percent_good < percent_problem:
+        f.write('Keep it up, dont give up:')
+        f.write('\n')
+        f.write(str(problem))
 
+    f.write('\n')
+    for index, problems in enumerate(problem):
+        if index == 0:
+            f.write('Please check Relationship.')
+        elif index == 1:
+            f.write('Please check your attribute name.')
+        elif index == 2:
+            f.write('Please check your label.')
+        elif index == 3:
+            f.write('Class name is not included in existing classes, please check.')
 
+# Second attempt feedback
+with open('attempt2.txt', 'w') as f:
+    f.write('Second Attempt Feedback:')
+    f.write('\n')
+    f.write('-----------------------------------')
+    if percent_good > percent_problem:
+        f.write('Good effort, keep it up, but there are some problems in this array:')
+        f.write('\n')
+        f.write(str(problem))
+    else:
+        f.write('There are more problems than good things in this array:')
+        f.write('\n')
+        f.write(str(problem))
+
+# Third attempt feedback
+with open('attempt3.txt', 'w') as f:
+    f.write('Third Attempt Feedback:')
+    f.write('\n')
+    f.write('-----------------------------------')
+    if percent_good > percent_problem:
+        f.write('You did a good job, but there is something you can improve on:')
+        f.write('\n')
+        f.write(str(problem))
+    elif percent_good < percent_problem:
+        f.write('Keep it up, dont give up:')
+        f.write('\n')
+        f.write(str(problem))
+
+    f.write('\n')
+    for index, problems in enumerate(problem):
+        if index == 0:
+            f.write('Please check Relationship.')
+        elif index == 1:
+            f.write('Please check your attribute name.')
+        elif index == 2:
+            f.write('Please check your label.')
+        elif index == 3:
+            f.write('Class name is not included in existing classes, please check.')

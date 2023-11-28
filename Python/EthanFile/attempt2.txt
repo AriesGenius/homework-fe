@@ -1,0 +1,28 @@
+First Attempt Feedback:
+-----------------------------------
+For your ClassComponets
+Keep it up, dont give up:
+Please Check your ClassComponent
+class1 ikarim wrong or null
+class1  time wrong or null
+class1 day  wrong or null
+class2  time  wrong or null
+class3  startTime  wrong or null
+class4  name  wrong or null
+---------------------------------
+For your RC
+Keep it up, dont give up:
+Please Check your RelationshipCompents
+
+ does not contain any of the symbols '<>v^'
+relationship3 have undefined Relationshiptype
+---------------------------------
+For your AC
+Keep it up, dont give up:
+Please Check your AttributeComponent
+attribute2 Attribute name are not exsiting in class name
+attribute3 have undefined visibility marker
+in attribute4 AttributeType wrong
+---------------------------------
+For your MC
+For MethodComponent You did good job

@@ -1,0 +1,17 @@
+First Attempt Feedback:
+-----------------------------------
+For your ClassComponets
+Keep it up, dont give up:
+Please check Class name format
+---------------------------------
+For your RC
+Keep it up, dont give up:
+Please Check your RelationshipCompents
+Please check labelPlease check your reationship type
+---------------------------------
+For your AC
+Keep it up, dont give up:
+Please Check your AttributeComponentplease check your attribute nameplease check your visibility markerplease check your AttributeType
+---------------------------------
+For your MC
+For MethodComponent You did good job

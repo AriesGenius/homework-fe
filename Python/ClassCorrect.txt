@@ -1,6 +1,0 @@
-StaffID = AttributeComponent(‘StaffID’, string, ‘-’)
-FirstName = AttributeComponent(‘SirstName’, string, ‘-’)
-LastName = AttributeComponent(‘lastName’, string, ‘-’)
-Salary = AttributeComponent(‘salary’, float, ‘-’)
-JoinDate = AttributeComponent(‘joinDate’, date, ‘-’)
-Work = RelationshipComponent(Association, Staff, Company, ‘works >’, [1..*, 1..*])

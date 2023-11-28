@@ -1,0 +1,21 @@
+class1 = ClassComponent(ikarim,[time, day])
+class2 = ClassComponent(Calendar,[time])
+class3 = ClassComponent(Meeting,[startTime])
+class4 = ClassComponent(Contact,[name])
+
+relationship1 = RelationshipComponent(Aggregation, ikarim, Calendar, < has, [0..*, 0..*])
+relationship2 = RelationshipComponent(Dependency, Calendar, Meeting,  , [0..*, 0..*])
+relationship3 = RelationshipComponent(vomposition, Meeeting, Conttact, has >, [0..*, 3..8])
+relationship4 = RelationshipComponent(Inhertance,contact,ikarim)
+
+attribute1 = AttributeComponent(time, date, -)
+attribute2 = AttributeComponent(Tay, date, +)
+attribute3 = AttributeComponent(time, date, @)
+attribute4 = AttributeComponent(startTime, DateTime, -)
+attribute5 = AttributeComponent(name, str, -)
+
+method1 = MethodComponent(findNextMeeting(), name:blyta, DateTime, +)
+method2 = MethodComponent(findNextMeeting(), name:str, Datefime, +)
+method3 = MethodComponent(includesAttendee(), name:str, bool, +)
+method4 = MethodComponent(getStartDateTime(), void, DateTime, +)
+method5 = MethodComponent(getName(), void, str, *)
