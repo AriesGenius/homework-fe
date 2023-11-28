@@ -109,7 +109,8 @@ export default function Index() {
             &nbsp; &nbsp;
             {/*  Link to download feedback, if available*/}
             {row.submit && (
-              <a type="link" href={row.homework_source} target="_blank">
+              // eslint-disable-next-line react/jsx-no-target-blank
+              <a type="link" href={row.homework_score} target="_blank" >
                 Feedback
               </a>
             )}

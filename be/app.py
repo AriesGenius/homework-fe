@@ -7,15 +7,15 @@ from sqlalchemy import text
 
 app = Flask(__name__)
 
-# MySQL所在的主机名
+# The host name where MySQL is located
 HOSTNAME = "8.134.18.116"
-# MySQL监听的端口号，默认3306
+# The port number MySQL listens to, default is 3306
 PORT = 3306
-# 连接MYSOL的用户名
+# Username to connect to MYSOL
 USERNAME = "Class"
-# 连接MYSQL的密码
+# Password to connect to MYSQL
 PASSWORD = "ClassAdmin"
-# MySQL上创建的数据库名称
+# Database name created on MySQL
 DATABASE = "class"
 
 app.config[
@@ -24,85 +24,85 @@ app.config[
 db = SQLAlchemy(app)
 
 
-# 用户表
+
+# User table
 class User(db.Model):
     __tablename__ = "user"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
     useremail = db.Column(db.String(100), nullable=False)
-    # 用户类型（老师/学生)
+   # User type (teacher/student)
     type = db.Column(db.String(100), nullable=False)
 
 
-# 课程表
+# Course table
 class Course(db.Model):
     __tablename__ = "course"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    # 课程名称
+    # Course name
     course_name = db.Column(db.String(100), nullable=False)
-    # 课程教师
+    # Course teacher
     course_teacher = db.Column(db.String(100), nullable=False)
 
 
-# 课程作业表
+# Course Homework table
 class CourseHomework(db.Model):
     __tablename__ = "course_homework"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    # 课程名称
+    # Course name
     course_name = db.Column(db.String(100), nullable=False)
-    # 课程作业
+    # Course homework
     course_homework = db.Column(db.String(100), nullable=False)
 
 
-# 作业表
+# Homework table
 class Homework(db.Model):
     __tablename__ = "homework"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    # 作业内容，file的格式
+    # Homework content, in file format
     homework_content = db.Column(db.String(100), nullable=False)
-    # 课程名称
+    # Homework name
     homework_name = db.Column(db.String(100), nullable=False)
-    # 课程作业
+    # Course homework
     homework_course = db.Column(db.String(100), nullable=False)
-    # 作业提交时间
+    # Homework submission time
     homework_time = db.Column(db.String(100), nullable=False)
-    # 作业分数
+    # Homework score
     homework_score = db.Column(db.String(100), nullable=False)
-    # 作业提交人
+    #user who submitted the homework
     homework_user = db.Column(db.String(100), nullable=False)
 
-
-# 学生选课表
+# Student course selection table
 class CourseMsg(db.Model):
     __tablename__ = "course_msg"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    # 学生姓名
+    # Student name
     student_name = db.Column(db.String(100), nullable=False)
-    # 课程名称
+    # Course name
     course_name = db.Column(db.String(100), nullable=False)
 
 
-# 创建所有表
+# Create all tables
 with app.app_context():
     db.create_all()
 
 
-# 一、用户操作
-# 增（注册
+# I. User operations
+# Add (Register)
 @app.route('/user/register', methods=['POST'])
 def register():
     try:
-        # 从POST请求中获取JSON数据
+        # Get JSON data from POST request
         request_data = request.get_json()
 
-        # 从JSON数据中提取用户信息
+        # Extract user information from JSON data
         username = request_data.get('username')
         password = request_data.get('password')
         useremail = request_data.get('useremail')
         user_type = request_data.get('type')
 
-        # 查找是否有相同的用户名存在
+        ## Extract user information from JSON data
         sql = text("select * from user where username = :username")
         result = db.session.execute(sql, {"username": username})
         usr_exist = result.fetchone()
@@ -110,32 +110,32 @@ def register():
         if usr_exist is not None:
             response_data = {
                 "code": 200,
-                "message": "用户名已经存在",
-                "data": {}  # 返回新用户的ID
+                "message": "Username already exists",
+                "data": {}  #  Return the ID of the new user
             }
             return jsonify(response_data)
 
-        # 创建新用户
+        # Create new user
         user = User(username=username, password=password, useremail=useremail, type=user_type)
 
-        # 将新用户添加到数据库中
+        # Add new user to the database
         db.session.add(user)
         db.session.commit()
 
-        # 返回成功的JSON响应
+        # Return a successful JSON response
         response_data = {
             "code": 200,
-            "message": "用户创建成功",
+            "message": "User created successfully",
             "data": {"user_id": user.id, "username": user.username, "type": user.type}  # 返回新用户的ID
         }
         return jsonify(response_data)
 
     except Exception as e:
         print(e)
-        # 如果发生错误，返回错误的JSON响应
+        # If an error occurs, return an error JSON response
         response_data = {
             "code": 500,
-            "message": "服务器内部错误",
+            "message": "Internal server error",
             "data": {}
         }
         return jsonify(response_data), 500
@@ -144,206 +144,206 @@ def register():
 @app.route('/user/login', methods=['POST'])
 def login():
     try:
-        # 从POST请求中获取JSON数据
+        # Get JSON data from POST request
         request_data = request.get_json()
 
-        # 从JSON数据中提取用户信息
+        # Extract user information from JSON data
         username = request_data.get('username')
         password = request_data.get('password')
         usertype = request_data.get('usertype')
-        # 查询用户名密码是否正确
+        # Check if username and password are correct
         sql = text("select * from user where username = :username and password = :password and type = :usertype")
         result = db.session.execute(sql, {"username": username, "password": password, "usertype": usertype})
         usr_exist = result.fetchone()
 
-        # 如果账号密码正确
+        # If the account and password are correct
         if usr_exist is not None:
-            # 查找所有课程
+            # Retrieve all courses
             response_data = {
                 "code": 200,
-                "message": "登录成功",
-                "data": {"username": username, "type": usertype}  # 返回新用户的ID
+                "message": "Login successful",
+                "data": {"username": username, "type": usertype}   # Return the new user's ID
             }
             return jsonify(response_data)
         else:
             response_data = {
                 "code": 500,
-                "message": "登录失败，账号或密码错误",
+                "message": "Login failed, incorrect account or password",
                 "data": {}
             }
             return jsonify(response_data), 500
 
     except Exception as e:
         print(e)
-        # 如果发生错误，返回错误的JSON响应
+        # If an error occurs, return an error JSON response
         response_data = {
             "code": 500,
-            "message": "服务器内部错误",
+            "message": "Internal server error",
             "data": {}
         }
         return jsonify(response_data), 500
 
 
-# 创建课程作业
+# Create course homework
 @app.route('/user/create_course_homework', methods=['POST'])
 def create_course_homework():
     try:
-        # 从POST请求中获取JSON数据
+        # Get JSON data from POST request
         request_data = request.get_json()
 
-        # 从JSON数据中提取课程信息
+        # Extract course information from JSON data
         course_name = request_data.get('course_name')
         course_homework = request_data.get('course_homework')
 
-        # 查询课程是否存在
+        # Check if the course exists
         sql = text("select * from course where course_name = :course_name")
         result = db.session.execute(sql, {"course_name": course_name})
         course = result.fetchone()
-        # 如果课程不存在
+        # If the course does not exist
         if course is None:
             response_data = {
                 "code": 500,
-                "message": "创建失败，该课程不存在",
+                "message": "Creation failed, the course does not exist",
                 "data": {}
             }
             return jsonify(response_data), 500
-        # 查询课程作业是否存在
+        # Check if the course homework already exists
         sql = text("select * from course_homework where course_homework = :course_homework")
         result = db.session.execute(sql, {"course_homework": course_homework})
         course_homeworks = result.fetchone()
-        # 如果课程作业已存在
+        # If the course homework already exists
         if course_homeworks is not None:
             response_data = {
                 "code": 500,
-                "message": "创建失败，该课程作业已存在",
+                "message": "Creation failed, the course homework already exists",
                 "data": {}
             }
             return jsonify(response_data), 500
 
-        # 创建新课程作业
+        # Create new course homework
         course_homework = CourseHomework(course_name=course_name, course_homework=course_homework)
-        # 将新课程作业添加到数据库中
+        # Add new course homework to the database
         db.session.add(course_homework)
         db.session.commit()
 
-        # 返回成功的JSON响应
+        # Return a successful JSON response
         response_data = {
             "code": 200,
-            "message": "课程作业创建成功",
-            "data": {"course_homework_id": course_homework.id}  # 返回新课程作业的ID
+            "message": "Course homework created successfully",
+            "data": {"course_homework_id": course_homework.id}  # Return the ID of the new course homework
         }
         return jsonify(response_data)
 
     except Exception as e:
         print(e)
-        # 如果发生错误，返回错误的JSON响应
+        # If an error occurs, return an error JSON response
         response_data = {
             "code": 500,
-            "message": "服务器内部错误",
+            "message": "Internal server error",
             "data": {}
         }
         return jsonify(response_data), 500
 
 
-# 提交作业
+# Submit homework
 @app.route('/user/submit_homework', methods=['POST'])
 def submit_homework():
     try:
-        # 从POST请求中获取JSON数据
+        # Get JSON data from POST request
         file = request.files['file']
-        # 课程名称
+        # Homework name
         homework_name = request.form['homework_name']
-        # 课程作业
+        # Course homework
         homework_course = request.form['homework_course']
         homework_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         homework_user = request.form['homework_user']
 
-        # 查询课程作业是否存在
+        # Check if the course homework exists
         sql = text("select * from course_homework where course_homework = :course_homework")
         result = db.session.execute(sql, {"course_homework": homework_name})
         course_homeworks = result.fetchone()
-        # 如果课程作业不存在
+        # If the course homework does not exist
         if course_homeworks is None:
             response_data = {
                 "code": 500,
-                "message": "提交失败，该课程作业不存在",
+                "message": "Submission failed, the course homework does not exist",
                 "data": {}
             }
             return jsonify(response_data), 500
 
-        # 查询学生是否注册该课程
+        # Check if the student is registered for the course
         sql = text("select * from course_msg where student_name = :student_name and course_name = :course_name")
 
         result = db.session.execute(sql, {"student_name": homework_user, "course_name": homework_course})
 
         course_msg = result.fetchone()
-        # 如果课程已经注册
+        # If the course is not registered
         if course_msg is None:
             response_data = {
                 "code": 500,
-                "message": "提交失败，该课程未注册",
+                "message": "Submission failed, the course is not registered",
                 "data": {}
             }
             return jsonify(response_data), 500
 
-        # 保存文件
-        path = r'D:\project\homework-fe\be'
+        # Save the file
+        path = r'E:\homework-fe\be'
         file.save(os.path.join(path, file.filename))
 
         outfile = getgrade(os.path.join(path, file.filename))
 
-        # 创建新作业
-        homework = Homework(homework_content=r'D:\project\homework-fe\be' + file.filename, homework_name=homework_name,
+        # Create new homework
+        homework = Homework(homework_content=r'E:\homework-fe\be' + file.filename, homework_name=homework_name,
                             homework_course=homework_course, homework_time=homework_time,
                             homework_user=homework_user, homework_score=outfile)
 
 
-        # 将新作业添加到数据库中    
+        # Add new homework to the database    
         db.session.add(homework)
         db.session.commit()
 
-        # 返回成功的JSON响应
+        # Return a successful JSON response
         response_data = {
             "code": 200,
-            "message": "作业提交成功",
-            "data": {"homework_id": homework.id}  # 返回新作业的ID
+            "message": "Homework submitted successfully",
+            "data": {"homework_id": homework.id}  # Return the ID of the new homework
         }
         return jsonify(response_data)
 
     except Exception as e:
         print(e)
-        # 如果发生错误，返回错误的JSON响应
+        # If an error occurs, return an error JSON response
         response_data = {
             "code": 500,
-            "message": "服务器内部错误",
+            "message": "Internal server error",
             "data": {}
         }
         return jsonify(response_data), 500
 
-# 通过教师名称查询所有课程
+# Query all courses by teacher name
 @app.route('/user/query_course_by_teacher', methods=['POST'])
 def query_course_by_teacher():
     try:
-        # 从POST请求中获取JSON数据
+        # Get JSON data from POST request
         request_data = request.get_json()
 
-        # 从JSON数据中提取课程信息
+        # Extract course information from JSON data
         course_teacher = request_data.get('course_teacher')
 
-        # 查询学生课程是否存在
+        # Check if the student course exists
         sql = text("select * from course where course_teacher = :course_teacher")
         result = db.session.execute(sql, {"course_teacher": course_teacher})
         courses = result.fetchall()
-        # 如果学生课程不存在
+        # If the student course does not exist
         if courses is None:
             response_data = {
                 "code": 500,
-                "message": "查询失败，该教师课程不存在",
+                "message": "Query failed, the teacher's courses do not exist",
                 "data": {}
             }
             return jsonify(response_data), 500
         else:
-            # 将结果转换为一个可以被序列化的数据类型
+            # Convert the result into a serializable data type
             courses_list = []
 
             for row in courses:
@@ -354,60 +354,60 @@ def query_course_by_teacher():
                 }
                 courses_list.append(course_dict)
 
-        # 返回成功的JSON响应
+        # Return a successful JSON response
         response_data = {
             "code": 200,
-            "message": "教师课程查询成功",
-            "data": {"courses": courses_list}  # 返回新作业的ID
+            "message": "Teacher course query successful",
+            "data": {"courses": courses_list}  # Return the ID of the new homework
         }
         return jsonify(response_data)
 
     except Exception as e:
         print(e)
-        # 如果发生错误，返回错误的JSON响应
+        # If an error occurs, return an error JSON response
         response_data = {
             "code": 500,
-            "message": "服务器内部错误",
+            "message": "Internal server error",
             "data": {}
         }
         return jsonify(response_data), 500
 
 
-# 通过课程名称查询所有作业,course_homework这张表
+# Query all homework by course name, from the course_homework table
 @app.route('/user/query_homework_by_course', methods=['POST'])
 def query_homework_by_course():
     host_with_port = request.host
     try:
-        # 从POST请求中获取JSON数据
+        # Get JSON data from POST request
         request_data = request.get_json()
 
-        # 从JSON数据中提取课程信息
+        # Extract course information from JSON data
         course_name = request_data.get('course_name')
         username = request_data.get('username')
 
-        # 查询学生课程是否存在
+        # Check if the student course exists
         sql = text("select * from course_homework where course_name = :course_name")
         result = db.session.execute(sql, {"course_name": course_name})
         courses = result.fetchall()
-        # 如果学生课程不存在
+        # If the student course does not exist
         if courses is None:
             response_data = {
                 "code": 500,
-                "message": "查询失败，该课程作业不存在",
+                "message": "Query failed, the course homework does not exist",
                 "data": {}
             }
             return jsonify(response_data), 500
         else:
-            # 将结果转换为一个可以被序列化的数据类型
+            # Convert the result into a serializable data type
             courses_list = []
 
             for row in courses:
                 course_dict = {
                     "id": row[0],
                     "course_name": row[1],
-                    "course_homework": row[2]
+                    "course_homework": row[2],
                 }
-                # 查询学生是否已经提交该作业
+                # Check if the student has already submitted the homework
                 sql = text(
                     "select * from homework where homework_course = :homework_course and homework_user = :homework_user and homework_name = :homework_name")
                 result = db.session.execute(sql, {"homework_course": course_name, "homework_user": username,
@@ -417,24 +417,24 @@ def query_homework_by_course():
                     course_dict["submit"] = False
                 else:
                     course_dict["submit"] = True
-                    # 如果学生提交了，则返回作业source
-                    course_dict["homework_source"] =f'http://{host_with_port}/{homeworks[5]}'
+                    # If the student has submitted, then return the homework score
+                    course_dict["homework_score"] =f'http://{host_with_port}/{homeworks[5]}'
                 courses_list.append(course_dict)
 
-        # 返回成功的JSON响应
+        # Return a successful JSON response
         response_data = {
             "code": 200,
-            "message": "课程作业查询成功",
-            "data": {"courses": courses_list}  # 返回新作业的ID
+            "message": "Course homework query successful",
+            "data": {"courses": courses_list}  # Return the ID of the new homework
         }
         return jsonify(response_data)
 
     except Exception as e:
         print(e)
-        # 如果发生错误，返回错误的JSON响应
+        # If an error occurs, return an error JSON response
         response_data = {
             "code": 200,
-            "message": "服务器内部错误",
+            "message": "Internal server error",
             "data": {}
         }
         return jsonify(response_data), 200
@@ -1012,9 +1012,9 @@ def getgrade(upfile):
             f.write("\n")
             mV += 1
             mLengthV += 1
-    # 后半部分处理
+    
     print("_________________________________")
-    class_example_file = r"D:\project\homework-fe\be\database.txt"
+    class_example_file = r"E:\homework-fe\be\database.txt"
 
     attribute_array = []
     realtion_array = []
@@ -1027,7 +1027,7 @@ def getgrade(upfile):
 
     def remove_all_brackets_and_quotes(attribute_array):
         """Removes all brackets and quotes from a text."""
-        return re.sub('[\[\]\'()]', '', attribute_array)
+        return re.sub('[\[\]\'()]','', attribute_array)
 
     def deletebreacket(Att_array):
         for item in Att_array:
@@ -1190,20 +1190,20 @@ def getgrade(upfile):
     print("Total count of good things:", count_good)
     print("Percentage of problems:", percent_problem)
     print("Percentage of good things:", percent_good)
-    # 把这些写入一个新的txt，命名为当前的时间戳.txt
+   
     import time
     import datetime
 
-    # 获取当前时间
+    # Get the current time
     now_time = datetime.datetime.now()
-    # 转换为指定的格式:
+    # Convert to a specified format:
     otherStyleTime = now_time.strftime("%Y-%m-%d%H%M%S")
     print(otherStyleTime)
-    # 把这些写入一个新的txt，命名为当前的时间戳.txt
-    # 取当前路径下的static
+    # Write these into a new txt file, named with the current timestamp
+    # Get the path under the current directory to the 'static' folder
     path = os.getcwd() + '\\be\\static'
     print('1111111'+path + '\\' + otherStyleTime + ".txt")
-    # 文件名为当前时间，路径为path
+    # The filename is the current time, the path is 'path'
     f = open(path + '\\' + otherStyleTime + ".txt", "w")
     f.write("Total count of problems:" + str(count_problem) + "\n")
     f.write("Total count of good things:" + str(count_good) + "\n")
@@ -1252,10 +1252,10 @@ def getgrade(upfile):
         print(problem)
         f.write(str(problem) + "\n")
     f.close()
-    # 返回文件名
+    # Return the filename
     return '/static/' + otherStyleTime + ".txt"
 
 
 if __name__ == '__main__':
-    # 开启Flask的调试模式
+    # Start Flask in debug mode
     app.run(debug=True)
